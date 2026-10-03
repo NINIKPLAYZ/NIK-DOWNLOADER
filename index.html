@@ -1,163 +1,255 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>NIK Downloader</title>
+<title>NIK Downloader</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-    }
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
 
-    body {
-      background: #f4f6f8;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
+body {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  color: white;
+}
 
-    .box {
-      width: 100%;
-      max-width: 500px;
-      background: white;
-      padding: 25px;
-      border-radius: 18px;
-      box-shadow: 0 5px 25px rgba(0,0,0,0.12);
-    }
+.container {
+  width: 100%;
+  max-width: 520px;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 22px;
+  padding: 25px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+}
 
-    h1 {
-      text-align: center;
-      margin-bottom: 8px;
-    }
+h1 {
+  text-align: center;
+  font-size: 30px;
+  margin-bottom: 8px;
+}
 
-    .subtitle {
-      text-align: center;
-      color: #666;
-      margin-bottom: 22px;
-    }
+.subtitle {
+  text-align: center;
+  color: #cbd5e1;
+  margin-bottom: 25px;
+}
 
-    input {
-      width: 100%;
-      padding: 14px;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      font-size: 16px;
-      margin-bottom: 15px;
-    }
+input {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  outline: none;
+  border-radius: 12px;
+  background: #f8fafc;
+  color: #111827;
+  font-size: 16px;
+  margin-bottom: 12px;
+}
 
-    button {
-      width: 100%;
-      padding: 14px;
-      border: none;
-      border-radius: 10px;
-      margin-top: 10px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+button {
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  padding: 14px;
+  margin-top: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
 
-    .check {
-      background: #111;
-      color: white;
-    }
+.download-main {
+  background: #22c55e;
+  color: white;
+}
 
-    .audio {
-      background: #e8f5e9;
-    }
+.download-main:hover {
+  background: #16a34a;
+}
 
-    .video {
-      background: #e3f2fd;
-    }
+#options {
+  display: none;
+  margin-top: 20px;
+}
 
-    .both {
-      background: #fff3e0;
-    }
+.section-title {
+  margin-top: 18px;
+  margin-bottom: 8px;
+  font-size: 15px;
+  color: #cbd5e1;
+}
 
-    #options {
-      display: none;
-      margin-top: 15px;
-    }
+.option {
+  background: #334155;
+  color: white;
+}
 
-    .message {
-      text-align: center;
-      margin-top: 15px;
-      color: #555;
-    }
-  </style>
+.option:hover {
+  background: #475569;
+}
+
+.quality {
+  background: #2563eb;
+  color: white;
+}
+
+#qualitySection {
+  display: none;
+}
+
+.message {
+  text-align: center;
+  margin-top: 15px;
+  color: #cbd5e1;
+  font-size: 14px;
+}
+</style>
 </head>
 
 <body>
 
-  <div class="box">
+<div class="container">
 
-    <h1>⬇️ NIK Downloader</h1>
+  <h1>NIK Downloader</h1>
 
-    <p class="subtitle">
-      Download available media from supported sources
-    </p>
+  <p class="subtitle">
+    Download available media from supported sources
+  </p>
 
-    <input
-      id="url"
-      type="url"
-      placeholder="Paste video URL here..."
-    >
+  <input
+    id="url"
+    type="url"
+    placeholder="Paste video URL here..."
+  >
 
-    <button class="check" onclick="checkUrl()">
-      Check URL
+  <!-- ALWAYS VISIBLE -->
+  <button
+    class="download-main"
+    onclick="showOptions()"
+  >
+    DOWNLOAD
+  </button>
+
+  <div id="options">
+
+    <div class="section-title">
+      Select Download Type
+    </div>
+
+    <button class="option" onclick="selectType('Audio Only')">
+      Audio Only
     </button>
 
-    <div id="options">
+    <button class="option" onclick="selectType('Video Only')">
+      Video Only
+    </button>
 
-      <button class="audio" onclick="downloadType('Audio Only')">
-        🎵 Audio Only
+    <button class="option" onclick="selectType('Video + Audio')">
+      Video + Audio
+    </button>
+
+    <div id="qualitySection">
+
+      <div class="section-title">
+        Select Quality
+      </div>
+
+      <button class="quality" onclick="downloadMedia('360p')">
+        360p
       </button>
 
-      <button class="video" onclick="downloadType('Video Only')">
-        🎬 Video Only
+      <button class="quality" onclick="downloadMedia('480p')">
+        480p
       </button>
 
-      <button class="both" onclick="downloadType('Video + Audio')">
-        🎬🎵 Video + Audio
+      <button class="quality" onclick="downloadMedia('720p HD')">
+        720p HD
+      </button>
+
+      <button class="quality" onclick="downloadMedia('1080p Full HD')">
+        1080p Full HD
       </button>
 
     </div>
 
-    <p id="message" class="message"></p>
-
   </div>
 
-  <script>
-    function checkUrl() {
-      const url = document.getElementById("url").value.trim();
-      const options = document.getElementById("options");
-      const message = document.getElementById("message");
+  <p id="message" class="message"></p>
 
-      if (!url) {
-        message.textContent = "Please paste a URL first.";
-        options.style.display = "none";
-        return;
-      }
+</div>
 
-      message.textContent = "URL received. Choose a download type.";
-      options.style.display = "block";
-    }
+<script>
 
-    function downloadType(type) {
-      const url = document.getElementById("url").value.trim();
+let selectedType = "";
 
-      alert(
-        type + " selected.\n\n" +
-        "Backend downloader will be connected here."
-      );
-    }
-  </script>
+function showOptions() {
+
+  const url = document.getElementById("url").value.trim();
+
+  if (!url) {
+    document.getElementById("message").textContent =
+      "Please paste a URL first.";
+    return;
+  }
+
+  document.getElementById("options").style.display = "block";
+
+  document.getElementById("message").textContent =
+    "Select download type.";
+}
+
+function selectType(type) {
+
+  selectedType = type;
+
+  document.getElementById("qualitySection").style.display = "block";
+
+  document.getElementById("message").textContent =
+    type + " selected. Now select quality.";
+}
+
+function downloadMedia(quality) {
+
+  const url = document.getElementById("url").value.trim();
+
+  if (!url) {
+    return;
+  }
+
+  if (!selectedType) {
+    return;
+  }
+
+  document.getElementById("message").textContent =
+    "Preparing " + selectedType + " - " + quality + "...";
+
+  /*
+    ACTUAL BACKEND DOWNLOAD API WILL BE CONNECTED HERE.
+
+    The backend should process only media that the user
+    is authorized/permitted to download.
+  */
+
+  alert(
+    "Download selected\n\n" +
+    "Type: " + selectedType + "\n" +
+    "Quality: " + quality
+  );
+}
+
+</script>
 
 </body>
 </html>
