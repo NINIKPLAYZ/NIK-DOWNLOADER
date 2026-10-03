@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>NIK Downloader</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f4f6f8;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .box {
+      width: 100%;
+      max-width: 500px;
+      background: white;
+      padding: 25px;
+      border-radius: 18px;
+      box-shadow: 0 5px 25px rgba(0,0,0,0.12);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 22px;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-size: 16px;
+      margin-bottom: 15px;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      margin-top: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .check {
+      background: #111;
+      color: white;
+    }
+
+    .audio {
+      background: #e8f5e9;
+    }
+
+    .video {
+      background: #e3f2fd;
+    }
+
+    .both {
+      background: #fff3e0;
+    }
+
+    #options {
+      display: none;
+      margin-top: 15px;
+    }
+
+    .message {
+      text-align: center;
+      margin-top: 15px;
+      color: #555;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="box">
+
+    <h1>⬇️ NIK Downloader</h1>
+
+    <p class="subtitle">
+      Download available media from supported sources
+    </p>
+
+    <input
+      id="url"
+      type="url"
+      placeholder="Paste video URL here..."
+    >
+
+    <button class="check" onclick="checkUrl()">
+      Check URL
+    </button>
+
+    <div id="options">
+
+      <button class="audio" onclick="downloadType('Audio Only')">
+        🎵 Audio Only
+      </button>
+
+      <button class="video" onclick="downloadType('Video Only')">
+        🎬 Video Only
+      </button>
+
+      <button class="both" onclick="downloadType('Video + Audio')">
+        🎬🎵 Video + Audio
+      </button>
+
+    </div>
+
+    <p id="message" class="message"></p>
+
+  </div>
+
+  <script>
+    function checkUrl() {
+      const url = document.getElementById("url").value.trim();
+      const options = document.getElementById("options");
+      const message = document.getElementById("message");
+
+      if (!url) {
+        message.textContent = "Please paste a URL first.";
+        options.style.display = "none";
+        return;
+      }
+
+      message.textContent = "URL received. Choose a download type.";
+      options.style.display = "block";
+    }
+
+    function downloadType(type) {
+      const url = document.getElementById("url").value.trim();
+
+      alert(
+        type + " selected.\n\n" +
+        "Backend downloader will be connected here."
+      );
+    }
+  </script>
+
+</body>
+</html>
