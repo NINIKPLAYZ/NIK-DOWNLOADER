@@ -318,33 +318,46 @@ document.getElementById("message");
 
 let selectedType = "";
 
-urlInput.addEventListener("input", function () {
 
-  const url =
-  this.value.trim();
+/* =========================
+   URL INPUT
+========================= */
 
-  if (url) {
+urlInput.addEventListener(
+  "input",
+  function () {
 
-    clearButton.style.display =
-    "block";
+    const url =
+      this.value.trim();
 
-    downloadButtons.style.display =
-    "block";
+    if (url) {
 
-  } else {
+      clearButton.style.display =
+        "block";
 
-    resetPage();
+      downloadButtons.style.display =
+        "block";
+
+    } else {
+
+      resetPage();
+
+    }
 
   }
+);
 
-});
+
+/* =========================
+   URL VALIDATION
+========================= */
 
 function isValidUrl(url) {
 
   try {
 
     const parsed =
-    new URL(url);
+      new URL(url);
 
     return (
       parsed.protocol === "http:" ||
@@ -359,102 +372,210 @@ function isValidUrl(url) {
 
 }
 
+
 function checkUrl() {
 
   const url =
-  urlInput.value.trim();
+    urlInput.value.trim();
 
   if (!url || !isValidUrl(url)) {
 
     message.textContent =
-    "✕ INVALID URL";
+      "✕ INVALID URL";
 
     return false;
 
   }
 
   message.textContent =
-  "";
+    "";
 
   return true;
 
 }
 
-function selectImage() {
+
+/* =========================
+   DOWNLOAD IMAGE
+========================= */
+
+async function selectImage() {
 
   if (!checkUrl()) return;
 
-  selectedType =
-  "IMAGE";
+  const url =
+    urlInput.value.trim();
 
   videoOptions.style.display =
-  "none";
+    "none";
 
   qualitySection.style.display =
-  "none";
+    "none";
 
   message.textContent =
-  "IMAGE DOWNLOAD SELECTED.";
+    "FINDING PUBLIC IMAGE...";
+
+  try {
+
+    const response =
+      await fetch(
+        BACKEND_URL +
+        "/download-image?url=" +
+        encodeURIComponent(url)
+      );
+
+    if (!response.ok) {
+
+      let errorMessage =
+        "IMAGE DOWNLOAD FAILED.";
+
+      try {
+
+        const data =
+          await response.json();
+
+        if (data.message) {
+
+          errorMessage =
+            data.message;
+
+        }
+
+      } catch {}
+
+      message.textContent =
+        "✕ " + errorMessage;
+
+      return;
+
+    }
+
+    const blob =
+      await response.blob();
+
+    const objectUrl =
+      URL.createObjectURL(blob);
+
+    const downloadLink =
+      document.createElement("a");
+
+    downloadLink.href =
+      objectUrl;
+
+    downloadLink.download =
+      "NIK-DOWNLOADER-IMAGE";
+
+    document.body.appendChild(
+      downloadLink
+    );
+
+    downloadLink.click();
+
+    downloadLink.remove();
+
+    setTimeout(
+      () => {
+        URL.revokeObjectURL(
+          objectUrl
+        );
+      },
+      1000
+    );
+
+    message.textContent =
+      "✓ IMAGE DOWNLOADED.";
+
+  } catch (error) {
+
+    console.error(
+      "Image download error:",
+      error
+    );
+
+    message.textContent =
+      "✕ IMAGE DOWNLOAD FAILED.";
+
+  }
 
 }
+
+
+/* =========================
+   VIDEO OPTIONS
+========================= */
 
 function showVideoOptions() {
 
   if (!checkUrl()) return;
 
   selectedType =
-  "";
+    "";
 
   videoOptions.style.display =
-  "block";
+    "block";
 
   qualitySection.style.display =
-  "none";
+    "none";
 
   message.textContent =
-  "SELECT VIDEO TYPE.";
+    "SELECT VIDEO TYPE.";
 
 }
+
+
+/* =========================
+   VIDEO TYPE
+========================= */
 
 function selectType(type) {
 
   if (!checkUrl()) return;
 
   selectedType =
-  type;
+    type;
 
   qualitySection.style.display =
-  "block";
+    "block";
 
   message.textContent =
-  type.toUpperCase() +
-  " SELECTED. SELECT QUALITY.";
+    type.toUpperCase() +
+    " SELECTED. SELECT QUALITY.";
 
 }
+
+
+/* =========================
+   VIDEO DOWNLOAD
+========================= */
 
 function downloadQuality(quality) {
 
   if (!checkUrl()) return;
 
   const url =
-  urlInput.value.trim();
+    urlInput.value.trim();
 
   message.textContent =
-  "STARTING DOWNLOAD...";
+    "STARTING DOWNLOAD...";
 
   const downloadUrl =
-  BACKEND_URL +
-  "/download?url=" +
-  encodeURIComponent(url) +
-  "&type=" +
-  encodeURIComponent(selectedType) +
-  "&quality=" +
-  encodeURIComponent(quality);
+    BACKEND_URL +
+    "/download?url=" +
+    encodeURIComponent(url) +
+    "&type=" +
+    encodeURIComponent(selectedType) +
+    "&quality=" +
+    encodeURIComponent(quality);
 
   window.location.href =
-  downloadUrl;
+    downloadUrl;
 
 }
+
+
+/* =========================
+   CLEAR
+========================= */
 
 function clearAll() {
 
@@ -462,28 +583,33 @@ function clearAll() {
 
 }
 
+
+/* =========================
+   RESET
+========================= */
+
 function resetPage() {
 
   urlInput.value =
-  "";
+    "";
 
   clearButton.style.display =
-  "none";
+    "none";
 
   downloadButtons.style.display =
-  "none";
+    "none";
 
   videoOptions.style.display =
-  "none";
+    "none";
 
   qualitySection.style.display =
-  "none";
+    "none";
 
   message.textContent =
-  "";
+    "";
 
   selectedType =
-  "";
+    "";
 
 }
 
