@@ -102,16 +102,6 @@ button {
   color: white;
 }
 
-.find-btn {
-  background: #2563eb;
-  color: white;
-}
-
-.download-btn {
-  background: #16a34a;
-  color: white;
-}
-
 #clearButton {
   display: none;
 }
@@ -131,18 +121,6 @@ button {
 
 #qualitySection {
   display: none;
-}
-
-#videoResult {
-  display: none;
-  margin-top: 18px;
-}
-
-.preview {
-  width: 100%;
-  border-radius: 12px;
-  background: #000;
-  margin-top: 10px;
 }
 
 .section-title {
@@ -165,10 +143,6 @@ button {
 
   min-height: 20px;
   font-weight: bold;
-}
-
-.format-item {
-  margin-top: 10px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -214,180 +188,167 @@ button {
 
 <div class="container">
 
-  <h1>NIK DOWNLOADER</h1>
+<h1>NIK DOWNLOADER</h1>
 
-  <p class="subtitle">
-    Download available media from supported sources
-  </p>
+<p class="subtitle">
+Download available media from supported sources
+</p>
 
-  <input
-    id="url"
-    type="text"
-    placeholder="PASTE URL HERE"
-    autocomplete="off"
-    spellcheck="false"
-  >
+<input
+  id="url"
+  type="text"
+  placeholder="PASTE URL HERE"
+  autocomplete="off"
+  spellcheck="false"
+>
 
-  <button
-    id="clearButton"
-    class="clear-btn"
-    onclick="clearAll()"
-  >
-    CLEAR
-  </button>
+<button
+  id="clearButton"
+  class="clear-btn"
+  onclick="clearAll()"
+>
+CLEAR
+</button>
 
-  <div id="options">
+<div id="options">
 
-    <div id="downloadButtons">
+  <div id="downloadButtons">
 
-      <div class="section-title">
-        SELECT DOWNLOAD TYPE
-      </div>
-
-      <button
-        class="option"
-        onclick="selectImage()"
-      >
-        IMAGE DOWNLOAD
-      </button>
-
-      <button
-        class="option"
-        onclick="selectProfileDP()"
-      >
-        PROFILE DP DOWNLOAD
-      </button>
-
-      <button
-        class="option"
-        onclick="showVideoOptions()"
-      >
-        VIDEO DOWNLOAD
-      </button>
-
+    <div class="section-title">
+      SELECT DOWNLOAD TYPE
     </div>
 
-    <div id="videoOptions">
+    <button
+      class="option"
+      onclick="selectImage()"
+    >
+      IMAGE DOWNLOAD
+    </button>
 
-      <div class="section-title">
-        SELECT VIDEO TYPE
-      </div>
+    <button
+      class="option"
+      onclick="selectProfileDP()"
+    >
+      PROFILE DP DOWNLOAD
+    </button>
 
-      <button
-        class="option"
-        onclick="selectType('Audio Only')"
-      >
-        AUDIO ONLY
-      </button>
-
-      <button
-        class="option"
-        onclick="selectType('Video Only')"
-      >
-        VIDEO ONLY
-      </button>
-
-      <button
-        class="option"
-        onclick="selectType('Video + Audio')"
-      >
-        VIDEO + AUDIO
-      </button>
-
-    </div>
-
-    <div id="qualitySection">
-
-      <div class="section-title">
-        FIND VIDEO
-      </div>
-
-      <button
-        class="find-btn"
-        onclick="findVideo()"
-      >
-        FIND VIDEO
-      </button>
-
-    </div>
-
-    <div id="videoResult">
-
-      <div class="section-title">
-        VIDEO PREVIEW
-      </div>
-
-      <video
-        id="videoPreview"
-        class="preview"
-        controls
-        playsinline
-      ></video>
-
-      <div class="section-title">
-        AVAILABLE FORMATS
-      </div>
-
-      <div id="formatList"></div>
-
-    </div>
+    <button
+      class="option"
+      onclick="showVideoOptions()"
+    >
+      VIDEO DOWNLOAD
+    </button>
 
   </div>
 
-  <p id="message" class="message"></p>
+  <div id="videoOptions">
+
+    <div class="section-title">
+      SELECT VIDEO TYPE
+    </div>
+
+    <button
+      class="option"
+      onclick="selectType('Audio Only')"
+    >
+      AUDIO ONLY
+    </button>
+
+    <button
+      class="option"
+      onclick="selectType('Video Only')"
+    >
+      VIDEO ONLY
+    </button>
+
+    <button
+      class="option"
+      onclick="selectType('Video + Audio')"
+    >
+      VIDEO + AUDIO
+    </button>
+
+  </div>
+
+  <div id="qualitySection">
+
+    <div class="section-title">
+      SELECT QUALITY
+    </div>
+
+    <button
+      class="quality"
+      onclick="downloadQuality('360p')"
+    >
+      360P
+    </button>
+
+    <button
+      class="quality"
+      onclick="downloadQuality('480p')"
+    >
+      480P
+    </button>
+
+    <button
+      class="quality"
+      onclick="downloadQuality('720p')"
+    >
+      720P
+    </button>
+
+    <button
+      class="quality"
+      onclick="downloadQuality('1080p')"
+    >
+      1080P
+    </button>
+
+  </div>
+
+</div>
+
+<p id="message" class="message"></p>
 
 </div>
 
 <script>
 
 const BACKEND_URL =
-  "https://nik-downloader-backend.onrender.com";
+"https://nik-downloader-backend.onrender.com";
 
 const urlInput =
-  document.getElementById("url");
+document.getElementById("url");
 
 const clearButton =
-  document.getElementById("clearButton");
+document.getElementById("clearButton");
 
 const downloadButtons =
-  document.getElementById("downloadButtons");
+document.getElementById("downloadButtons");
 
 const videoOptions =
-  document.getElementById("videoOptions");
+document.getElementById("videoOptions");
 
 const qualitySection =
-  document.getElementById("qualitySection");
-
-const videoResult =
-  document.getElementById("videoResult");
-
-const videoPreview =
-  document.getElementById("videoPreview");
-
-const formatList =
-  document.getElementById("formatList");
+document.getElementById("qualitySection");
 
 const message =
-  document.getElementById("message");
+document.getElementById("message");
 
 let selectedType = "";
-let foundVideos = [];
-
-
-/* URL INPUT */
 
 urlInput.addEventListener("input", function () {
 
   const url =
-    this.value.trim();
+  this.value.trim();
 
   if (url) {
 
     clearButton.style.display =
-      "block";
+    "block";
 
     downloadButtons.style.display =
-      "block";
+    "block";
 
   } else {
 
@@ -397,15 +358,12 @@ urlInput.addEventListener("input", function () {
 
 });
 
-
-/* URL CHECK */
-
 function isValidUrl(url) {
 
   try {
 
     const parsed =
-      new URL(url);
+    new URL(url);
 
     return (
       parsed.protocol === "http:" ||
@@ -420,283 +378,120 @@ function isValidUrl(url) {
 
 }
 
-
 function checkUrl() {
 
   const url =
-    urlInput.value.trim();
+  urlInput.value.trim();
 
   if (!url || !isValidUrl(url)) {
 
     message.textContent =
-      "✕ INVALID URL";
+    "✕ INVALID URL";
 
     return false;
+
   }
 
-  message.textContent = "";
+  message.textContent =
+  "";
 
   return true;
+
 }
-
-
-/* IMAGE */
 
 function selectImage() {
 
   if (!checkUrl()) return;
 
-  selectedType = "IMAGE";
+  selectedType =
+  "IMAGE";
 
   videoOptions.style.display =
-    "none";
+  "none";
 
   qualitySection.style.display =
-    "none";
-
-  videoResult.style.display =
-    "none";
+  "none";
 
   message.textContent =
-    "IMAGE DOWNLOAD SELECTED.";
+  "IMAGE DOWNLOAD SELECTED.";
+
 }
-
-
-/* PROFILE */
 
 function selectProfileDP() {
 
   if (!checkUrl()) return;
 
   selectedType =
-    "PROFILE DP";
+  "PROFILE DP";
 
   videoOptions.style.display =
-    "none";
+  "none";
 
   qualitySection.style.display =
-    "none";
-
-  videoResult.style.display =
-    "none";
+  "none";
 
   message.textContent =
-    "PROFILE DP DOWNLOAD SELECTED.";
+  "PROFILE DP DOWNLOAD SELECTED.";
+
 }
-
-
-/* VIDEO */
 
 function showVideoOptions() {
 
   if (!checkUrl()) return;
 
-  selectedType = "";
+  selectedType =
+  "";
 
   videoOptions.style.display =
-    "block";
+  "block";
 
   qualitySection.style.display =
-    "none";
-
-  videoResult.style.display =
-    "none";
+  "none";
 
   message.textContent =
-    "SELECT VIDEO TYPE.";
+  "SELECT VIDEO TYPE.";
+
 }
-
-
-/* VIDEO TYPE */
 
 function selectType(type) {
 
   if (!checkUrl()) return;
 
-  selectedType = type;
+  selectedType =
+  type;
 
   qualitySection.style.display =
-    "block";
-
-  videoResult.style.display =
-    "none";
+  "block";
 
   message.textContent =
-    type.toUpperCase() +
-    " SELECTED. TAP FIND VIDEO.";
+  type.toUpperCase() +
+  " SELECTED. SELECT QUALITY.";
+
 }
 
-
-/* FIND VIDEO */
-
-async function findVideo() {
+function downloadQuality(quality) {
 
   if (!checkUrl()) return;
 
-  if (
-    selectedType !== "Audio Only" &&
-    selectedType !== "Video Only" &&
-    selectedType !== "Video + Audio"
-  ) {
-
-    message.textContent =
-      "PLEASE SELECT VIDEO TYPE.";
-
-    return;
-  }
-
   const url =
-    urlInput.value.trim();
+  urlInput.value.trim();
 
   message.textContent =
-    "FINDING VIDEO...";
-
-  videoResult.style.display =
-    "none";
-
-  formatList.innerHTML =
-    "";
-
-  foundVideos = [];
-
-  try {
-
-    const response =
-      await fetch(
-        BACKEND_URL +
-        "/find-video?url=" +
-        encodeURIComponent(url)
-      );
-
-    const result =
-      await response.json();
-
-    if (
-      !response.ok ||
-      !result.success
-    ) {
-
-      message.textContent =
-        result.message ||
-        "VIDEO NOT FOUND.";
-
-      return;
-    }
-
-    if (
-      !result.videos ||
-      result.videos.length === 0
-    ) {
-
-      message.textContent =
-        "NO PUBLIC VIDEO FOUND.";
-
-      return;
-    }
-
-    foundVideos =
-      result.videos;
-
-    /*
-      Preview first available source
-    */
-    videoPreview.src =
-      foundVideos[0].url ||
-      foundVideos[0];
-
-    videoPreview.load();
-
-    videoResult.style.display =
-      "block";
-
-    /*
-      Show every source returned
-      by the backend.
-    */
-    foundVideos.forEach(
-      (video, index) => {
-
-        const videoUrl =
-          video.url || video;
-
-        const type =
-          video.type ||
-          "VIDEO";
-
-        const label =
-          video.label ||
-          type.toUpperCase();
-
-        const item =
-          document.createElement("div");
-
-        item.className =
-          "format-item";
-
-        const button =
-          document.createElement("button");
-
-        button.className =
-          "download-btn";
-
-        button.textContent =
-          label;
-
-        button.onclick =
-          function () {
-
-            downloadVideo(
-              videoUrl
-            );
-
-          };
-
-        item.appendChild(button);
-
-        formatList.appendChild(item);
-
-      }
-    );
-
-    message.textContent =
-      "VIDEO FOUND. SELECT FORMAT.";
-
-  } catch (error) {
-
-    console.error(error);
-
-    message.textContent =
-      "VIDEO COULD NOT BE FOUND.";
-  }
-}
-
-
-/* DOWNLOAD */
-
-function downloadVideo(videoUrl) {
-
-  if (!videoUrl) {
-
-    message.textContent =
-      "VIDEO URL NOT AVAILABLE.";
-
-    return;
-  }
-
-  message.textContent =
-    "DOWNLOAD STARTING...";
+  "STARTING DOWNLOAD...";
 
   const downloadUrl =
-    BACKEND_URL +
-    "/download?url=" +
-    encodeURIComponent(videoUrl);
+  BACKEND_URL +
+  "/download?url=" +
+  encodeURIComponent(url) +
+  "&type=" +
+  encodeURIComponent(selectedType) +
+  "&quality=" +
+  encodeURIComponent(quality);
 
   window.location.href =
-    downloadUrl;
+  downloadUrl;
+
 }
-
-
-/* CLEAR */
 
 function clearAll() {
 
@@ -704,44 +499,32 @@ function clearAll() {
 
 }
 
-
 function resetPage() {
 
-  urlInput.value = "";
+  urlInput.value =
+  "";
 
   clearButton.style.display =
-    "none";
+  "none";
 
   downloadButtons.style.display =
-    "none";
+  "none";
 
   videoOptions.style.display =
-    "none";
+  "none";
 
   qualitySection.style.display =
-    "none";
-
-  videoResult.style.display =
-    "none";
-
-  videoPreview.pause();
-
-  videoPreview.removeAttribute("src");
-
-  videoPreview.load();
-
-  formatList.innerHTML =
-    "";
+  "none";
 
   message.textContent =
-    "";
+  "";
 
-  selectedType = "";
+  selectedType =
+  "";
 
-  foundVideos = [];
 }
 
 </script>
 
 </body>
-  </html>
+</html>
