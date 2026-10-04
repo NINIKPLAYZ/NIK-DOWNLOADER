@@ -55,7 +55,6 @@ h1 {
 
 input {
   width: 100%;
-
   padding: 15px;
 
   border: 1px solid #cbd5e1;
@@ -67,7 +66,6 @@ input {
   color: #111827;
 
   font-size: 16px;
-
   text-align: center;
 }
 
@@ -86,7 +84,6 @@ button {
   border-radius: 12px;
 
   padding: 14px;
-
   margin-top: 10px;
 
   font-size: 16px;
@@ -114,7 +111,6 @@ button {
   display: none;
 }
 
-/* Fixed area so input does not move */
 #options {
   min-height: 430px;
   padding-top: 10px;
@@ -228,7 +224,7 @@ button {
     CLEAR
   </button>
 
-  <!-- FIXED OPTIONS AREA -->
+  <!-- OPTIONS -->
   <div id="options">
 
     <!-- DOWNLOAD BUTTONS -->
@@ -377,10 +373,6 @@ urlInput.addEventListener("input", function () {
     clearButton.style.display =
       "block";
 
-    /*
-      URL paste hote hi
-      download buttons show
-    */
     downloadButtons.style.display =
       "block";
 
@@ -528,16 +520,24 @@ function selectType(type) {
 
 
 /* DOWNLOAD */
-function downloadMedia(quality) {
+async function downloadMedia(quality) {
 
   if (!checkUrl()) {
     return;
   }
 
-  if (!selectedType) {
+  /*
+    Only video types can use
+    the quality/download system.
+  */
+  if (
+    selectedType !== "Audio Only" &&
+    selectedType !== "Video Only" &&
+    selectedType !== "Video + Audio"
+  ) {
 
     message.textContent =
-      "PLEASE SELECT DOWNLOAD TYPE.";
+      "PLEASE SELECT VIDEO TYPE.";
 
     return;
   }
@@ -546,18 +546,112 @@ function downloadMedia(quality) {
     urlInput.value.trim();
 
   message.textContent =
-    "DOWNLOAD STARTING...";
+    "VIDEO SOURCE FINDING...";
 
-  /*
-    Backend direct media URL
-  */
-  const downloadUrl =
-    BACKEND_URL +
-    "/download?url=" +
-    encodeURIComponent(url);
+  try {
 
-  window.location.href =
-    downloadUrl;
+    /*
+      First check whether the URL itself
+      is already a direct media URL.
+    */
+    const lowerUrl =
+      url.toLowerCase();
+
+    const isDirectVideo =
+      lowerUrl.includes(".mp4") ||
+      lowerUrl.includes(".webm") ||
+      lowerUrl.includes(".mov") ||
+      lowerUrl.includes(".m4v") ||
+      lowerUrl.includes(".ogv");
+
+    if (isDirectVideo) {
+
+      message.textContent =
+        "VIDEO FOUND. DOWNLOAD STARTING...";
+
+      const directDownloadUrl =
+        BACKEND_URL +
+        "/download?url=" +
+        encodeURIComponent(url);
+
+      window.location.href =
+        directDownloadUrl;
+
+      return;
+    }
+
+
+    /*
+      If it is an HTML page,
+      ask backend to find an openly
+      embedded video source.
+    */
+    const findUrl =
+      BACKEND_URL +
+      "/find-video?url=" +
+      encodeURIComponent(url);
+
+    const findResponse =
+      await fetch(findUrl);
+
+    const result =
+      await findResponse.json();
+
+    if (!findResponse.ok ||
+        !result.success) {
+
+      message.textContent =
+        result.message ||
+        "VIDEO SOURCE NOT FOUND.";
+
+      return;
+    }
+
+    if (
+      !result.videos ||
+      result.videos.length === 0
+    ) {
+
+      message.textContent =
+        "NO PUBLIC VIDEO FOUND.";
+
+      return;
+    }
+
+
+    /*
+      Use first public video source.
+    */
+    const videoUrl =
+      result.videos[0];
+
+    message.textContent =
+      "VIDEO FOUND. DOWNLOAD STARTING...";
+
+
+    /*
+      Send direct video URL
+      to backend downloader.
+    */
+    const downloadUrl =
+      BACKEND_URL +
+      "/download?url=" +
+      encodeURIComponent(videoUrl);
+
+    window.location.href =
+      downloadUrl;
+
+  } catch (error) {
+
+    console.error(
+      "Download error:",
+      error
+    );
+
+    message.textContent =
+      "VIDEO COULD NOT BE FOUND.";
+  }
+
 }
 
 
