@@ -7,6 +7,7 @@
 <title>NIK DOWNLOADER</title>
 
 <style>
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -26,22 +27,23 @@ body {
   padding: 20px;
 }
 
+/* MAIN CONTAINER */
+
 .container {
   width: 100%;
   max-width: 520px;
 
-  background: white;
+  background: transparent;
 
-  border: 1px solid #e2e8f0;
-  border-radius: 22px;
+  border: none;
+  border-radius: 0;
 
   padding: 25px;
 
-  box-shadow: 0 10px 35px rgba(0,0,0,.12);
+  box-shadow: none;
 }
 
-
-/* URL */
+/* URL BOX */
 
 input {
   width: 100%;
@@ -51,9 +53,9 @@ input {
   border: 1px solid #cbd5e1;
   outline: none;
 
-  border-radius: 12px;
+  border-radius: 0;
 
-  background: white;
+  background: transparent;
   color: #111827;
 
   font-size: 16px;
@@ -67,10 +69,10 @@ input:focus {
 
 input::placeholder {
   text-align: center;
+  color: #64748b;
 }
 
-
-/* CLEAR */
+/* CLEAR BUTTON */
 
 .clear-btn {
   width: 100%;
@@ -82,11 +84,11 @@ input::placeholder {
   background: #ef4444;
   color: white;
 
-  border: none !important;
-  outline: none !important;
-  box-shadow: none !important;
+  border: none;
+  outline: none;
+  box-shadow: none;
 
-  border-radius: 50px;
+  border-radius: 0;
 
   font-size: 16px;
   font-weight: bold;
@@ -94,8 +96,7 @@ input::placeholder {
   cursor: pointer;
 }
 
-
-/* DOWNLOAD BUTTONS */
+/* ALL DOWNLOAD BUTTONS */
 
 .option,
 .quality {
@@ -116,7 +117,7 @@ input::placeholder {
   outline: none !important;
   box-shadow: none !important;
 
-  border-radius: 50px;
+  border-radius: 0;
 
   font-size: 16px;
   font-weight: bold;
@@ -124,15 +125,13 @@ input::placeholder {
   cursor: pointer;
 }
 
-
 /* QUALITY */
 
 .quality {
   color: #2563eb;
 }
 
-
-/* REMOVE BUTTON FRAME */
+/* REMOVE BUTTON EFFECTS */
 
 .option:hover,
 .option:active,
@@ -150,16 +149,10 @@ input::placeholder {
   box-shadow: none !important;
 }
 
-
-/* OPTIONS */
+/* HIDDEN SECTIONS */
 
 #clearButton {
   display: none;
-}
-
-#options {
-  min-height: 430px;
-  padding-top: 10px;
 }
 
 #downloadButtons {
@@ -174,6 +167,12 @@ input::placeholder {
   display: none;
 }
 
+/* OPTIONS */
+
+#options {
+  min-height: 430px;
+  padding-top: 10px;
+}
 
 /* SECTION TITLE */
 
@@ -189,7 +188,6 @@ input::placeholder {
 
   text-align: center;
 }
-
 
 /* MESSAGE */
 
@@ -207,7 +205,6 @@ input::placeholder {
   font-weight: bold;
 }
 
-
 /* DARK MODE */
 
 @media (prefers-color-scheme: dark) {
@@ -218,12 +215,13 @@ input::placeholder {
   }
 
   .container {
-    background: #1e293b;
-    border-color: #334155;
+    background: transparent;
+    border: none;
+    box-shadow: none;
   }
 
   input {
-    background: #0f172a;
+    background: transparent;
     color: white;
     border-color: #475569;
   }
@@ -249,7 +247,6 @@ input::placeholder {
 </style>
 </head>
 
-
 <body>
 
 <div class="container">
@@ -264,7 +261,6 @@ input::placeholder {
     spellcheck="false"
   >
 
-
   <!-- CLEAR -->
 
   <button
@@ -275,11 +271,9 @@ input::placeholder {
     CLEAR
   </button>
 
-
   <!-- OPTIONS -->
 
   <div id="options">
-
 
     <!-- DOWNLOAD TYPES -->
 
@@ -289,7 +283,6 @@ input::placeholder {
         SELECT DOWNLOAD TYPE
       </div>
 
-
       <button
         class="option"
         onclick="selectImage()"
@@ -297,14 +290,12 @@ input::placeholder {
         IMAGE DOWNLOAD
       </button>
 
-
       <button
         class="option"
         onclick="selectProfileDP()"
       >
         PROFILE DP DOWNLOAD
       </button>
-
 
       <button
         class="option"
@@ -315,7 +306,6 @@ input::placeholder {
 
     </div>
 
-
     <!-- VIDEO TYPES -->
 
     <div id="videoOptions">
@@ -324,7 +314,6 @@ input::placeholder {
         SELECT VIDEO TYPE
       </div>
 
-
       <button
         class="option"
         onclick="selectType('Audio Only')"
@@ -332,14 +321,12 @@ input::placeholder {
         AUDIO ONLY
       </button>
 
-
       <button
         class="option"
         onclick="selectType('Video Only')"
       >
         VIDEO ONLY
       </button>
-
 
       <button
         class="option"
@@ -350,7 +337,6 @@ input::placeholder {
 
     </div>
 
-
     <!-- QUALITY -->
 
     <div id="qualitySection">
@@ -359,14 +345,12 @@ input::placeholder {
         SELECT QUALITY
       </div>
 
-
       <button
         class="quality"
         onclick="downloadMedia('360p')"
       >
         360P
       </button>
-
 
       <button
         class="quality"
@@ -375,14 +359,12 @@ input::placeholder {
         480P
       </button>
 
-
       <button
         class="quality"
         onclick="downloadMedia('720p HD')"
       >
         720P HD
       </button>
-
 
       <button
         class="quality"
@@ -395,22 +377,14 @@ input::placeholder {
 
   </div>
 
-
-  <!-- MESSAGE -->
-
-  <p
-    id="message"
-    class="message"
-  ></p>
+  <p id="message" class="message"></p>
 
 </div>
-
 
 <script>
 
 const BACKEND_URL =
   "https://nik-downloader-backend.onrender.com";
-
 
 const urlInput =
   document.getElementById("url");
@@ -430,7 +404,6 @@ const qualitySection =
 const message =
   document.getElementById("message");
 
-
 let selectedType = "";
 
 
@@ -438,37 +411,23 @@ let selectedType = "";
 
 urlInput.addEventListener("input", function() {
 
-  const url =
-    this.value.trim();
-
+  const url = this.value.trim();
 
   if (url) {
 
-    clearButton.style.display =
-      "block";
-
-    downloadButtons.style.display =
-      "block";
+    clearButton.style.display = "block";
+    downloadButtons.style.display = "block";
 
   } else {
 
-    clearButton.style.display =
-      "none";
+    clearButton.style.display = "none";
+    downloadButtons.style.display = "none";
+    videoOptions.style.display = "none";
+    qualitySection.style.display = "none";
 
-    downloadButtons.style.display =
-      "none";
+    message.textContent = "";
 
-    videoOptions.style.display =
-      "none";
-
-    qualitySection.style.display =
-      "none";
-
-    message.textContent =
-      "";
-
-    selectedType =
-      "";
+    selectedType = "";
   }
 
 });
@@ -480,8 +439,7 @@ function isValidUrl(url) {
 
   try {
 
-    const parsed =
-      new URL(url);
+    const parsed = new URL(url);
 
     return (
       parsed.protocol === "http:" ||
@@ -491,7 +449,6 @@ function isValidUrl(url) {
   } catch {
 
     return false;
-
   }
 
 }
@@ -501,14 +458,9 @@ function isValidUrl(url) {
 
 function checkUrl() {
 
-  const url =
-    urlInput.value.trim();
+  const url = urlInput.value.trim();
 
-
-  if (
-    !url ||
-    !isValidUrl(url)
-  ) {
+  if (!url || !isValidUrl(url)) {
 
     message.textContent =
       "✕ INVALID URL";
@@ -516,9 +468,7 @@ function checkUrl() {
     return false;
   }
 
-
-  message.textContent =
-    "";
+  message.textContent = "";
 
   return true;
 }
@@ -528,22 +478,12 @@ function checkUrl() {
 
 function selectImage() {
 
-  if (!checkUrl()) {
-    return;
-  }
+  if (!checkUrl()) return;
 
+  selectedType = "IMAGE";
 
-  selectedType =
-    "IMAGE";
-
-
-  videoOptions.style.display =
-    "none";
-
-
-  qualitySection.style.display =
-    "none";
-
+  videoOptions.style.display = "none";
+  qualitySection.style.display = "none";
 
   message.textContent =
     "IMAGE DOWNLOAD SELECTED.";
@@ -554,22 +494,12 @@ function selectImage() {
 
 function selectProfileDP() {
 
-  if (!checkUrl()) {
-    return;
-  }
+  if (!checkUrl()) return;
 
+  selectedType = "PROFILE DP";
 
-  selectedType =
-    "PROFILE DP";
-
-
-  videoOptions.style.display =
-    "none";
-
-
-  qualitySection.style.display =
-    "none";
-
+  videoOptions.style.display = "none";
+  qualitySection.style.display = "none";
 
   message.textContent =
     "PROFILE DP DOWNLOAD SELECTED.";
@@ -580,22 +510,12 @@ function selectProfileDP() {
 
 function showVideoOptions() {
 
-  if (!checkUrl()) {
-    return;
-  }
+  if (!checkUrl()) return;
 
+  selectedType = "";
 
-  selectedType =
-    "";
-
-
-  videoOptions.style.display =
-    "block";
-
-
-  qualitySection.style.display =
-    "none";
-
+  videoOptions.style.display = "block";
+  qualitySection.style.display = "none";
 
   message.textContent =
     "SELECT VIDEO TYPE.";
@@ -606,18 +526,11 @@ function showVideoOptions() {
 
 function selectType(type) {
 
-  if (!checkUrl()) {
-    return;
-  }
+  if (!checkUrl()) return;
 
+  selectedType = type;
 
-  selectedType =
-    type;
-
-
-  qualitySection.style.display =
-    "block";
-
+  qualitySection.style.display = "block";
 
   message.textContent =
     type.toUpperCase() +
@@ -629,10 +542,7 @@ function selectType(type) {
 
 function downloadMedia(quality) {
 
-  if (!checkUrl()) {
-    return;
-  }
-
+  if (!checkUrl()) return;
 
   if (!selectedType) {
 
@@ -642,20 +552,16 @@ function downloadMedia(quality) {
     return;
   }
 
-
   const url =
     urlInput.value.trim();
 
-
   message.textContent =
     "DOWNLOAD STARTING...";
-
 
   const downloadUrl =
     BACKEND_URL +
     "/download?url=" +
     encodeURIComponent(url);
-
 
   window.location.href =
     downloadUrl;
@@ -666,32 +572,16 @@ function downloadMedia(quality) {
 
 function clearAll() {
 
-  urlInput.value =
-    "";
+  urlInput.value = "";
 
+  clearButton.style.display = "none";
+  downloadButtons.style.display = "none";
+  videoOptions.style.display = "none";
+  qualitySection.style.display = "none";
 
-  clearButton.style.display =
-    "none";
+  message.textContent = "";
 
-
-  downloadButtons.style.display =
-    "none";
-
-
-  videoOptions.style.display =
-    "none";
-
-
-  qualitySection.style.display =
-    "none";
-
-
-  message.textContent =
-    "";
-
-
-  selectedType =
-    "";
+  selectedType = "";
 }
 
 </script>
