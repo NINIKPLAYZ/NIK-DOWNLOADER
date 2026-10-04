@@ -74,11 +74,6 @@
       cursor: pointer;
     }
 
-    .download-main {
-      background: #22c55e;
-      color: white;
-    }
-
     .clear-btn {
       background: #ef4444;
       color: white;
@@ -118,6 +113,7 @@
     }
 
     @media (prefers-color-scheme: dark) {
+
       body {
         background: #0f172a;
         color: #f8fafc;
@@ -132,6 +128,12 @@
       .section-title,
       .message {
         color: #cbd5e1;
+      }
+
+      input {
+        background: #0f172a;
+        color: white;
+        border-color: #475569;
       }
 
       .option {
@@ -158,13 +160,7 @@
       placeholder="PASTE URL HERE"
     >
 
-    <button
-      class="download-main"
-      onclick="showOptions()"
-    >
-      DOWNLOAD
-    </button>
-
+    <!-- CLEAR -->
     <button
       id="clearButton"
       class="clear-btn"
@@ -172,6 +168,9 @@
     >
       CLEAR
     </button>
+
+
+    <!-- DOWNLOAD OPTIONS -->
 
     <div id="options">
 
@@ -199,6 +198,9 @@
       >
         VIDEO DOWNLOAD
       </button>
+
+
+      <!-- VIDEO TYPE -->
 
       <div id="videoOptions">
 
@@ -228,6 +230,9 @@
         </button>
 
       </div>
+
+
+      <!-- QUALITY -->
 
       <div id="qualitySection">
 
@@ -267,6 +272,7 @@
 
     </div>
 
+
     <p
       id="message"
       class="message"
@@ -275,165 +281,252 @@
   </div>
 
 
-  <script>
+<script>
 
-    const BACKEND_URL =
-      "https://nik-downloader-backend.onrender.com";
+const BACKEND_URL =
+  "https://nik-downloader-backend.onrender.com";
 
-    let selectedType = "";
+let selectedType = "";
 
 
-    function showOptions() {
+/* URL CHECK */
 
-      const url =
-        document.getElementById("url").value.trim();
+function isValidUrl() {
 
-      const options =
-        document.getElementById("options");
+  const url =
+    document.getElementById("url").value.trim();
 
-      const clearButton =
-        document.getElementById("clearButton");
+  try {
 
-      const message =
-        document.getElementById("message");
+    const parsedUrl = new URL(url);
 
-      if (!url) {
+    return (
+      parsedUrl.protocol === "http:" ||
+      parsedUrl.protocol === "https:"
+    );
 
-        message.textContent =
-          "PLEASE PASTE A URL FIRST.";
+  } catch {
 
-        return;
-      }
+    return false;
+  }
+}
+
+
+/* CHECK URL ONLY AFTER BUTTON CLICK */
+
+function checkUrl() {
+
+  const message =
+    document.getElementById("message");
+
+  if (!isValidUrl()) {
+
+    message.textContent =
+      "✕ INVALID URL";
+
+    message.style.color =
+      "#dc2626";
+
+    return false;
+  }
+
+  message.textContent = "";
+
+  return true;
+}
+
+
+/* IMAGE */
+
+function selectImage() {
+
+  if (!checkUrl()) {
+    return;
+  }
+
+  selectedType = "IMAGE";
+
+  document.getElementById("videoOptions")
+    .style.display = "none";
+
+  document.getElementById("qualitySection")
+    .style.display = "none";
+
+  document.getElementById("message")
+    .textContent =
+    "IMAGE DOWNLOAD SELECTED.";
+}
+
+
+/* PROFILE DP */
+
+function selectProfileDP() {
+
+  if (!checkUrl()) {
+    return;
+  }
+
+  selectedType = "PROFILE DP";
+
+  document.getElementById("videoOptions")
+    .style.display = "none";
+
+  document.getElementById("qualitySection")
+    .style.display = "none";
+
+  document.getElementById("message")
+    .textContent =
+    "PROFILE DP DOWNLOAD SELECTED.";
+}
+
+
+/* VIDEO */
+
+function showVideoOptions() {
+
+  if (!checkUrl()) {
+    return;
+  }
+
+  document.getElementById("videoOptions")
+    .style.display = "block";
+
+  document.getElementById("qualitySection")
+    .style.display = "none";
+
+  document.getElementById("message")
+    .textContent =
+    "SELECT VIDEO TYPE.";
+}
+
+
+/* VIDEO TYPE */
+
+function selectType(type) {
+
+  if (!checkUrl()) {
+    return;
+  }
+
+  selectedType = type;
+
+  document.getElementById("qualitySection")
+    .style.display = "block";
+
+  document.getElementById("message")
+    .textContent =
+    type.toUpperCase() +
+    " SELECTED. SELECT QUALITY.";
+}
+
+
+/* DOWNLOAD */
+
+function downloadMedia(quality) {
+
+  if (!checkUrl()) {
+    return;
+  }
+
+  const url =
+    document.getElementById("url").value.trim();
+
+  const message =
+    document.getElementById("message");
+
+  if (!selectedType) {
+
+    message.textContent =
+      "PLEASE SELECT DOWNLOAD TYPE.";
+
+    return;
+  }
+
+  message.textContent =
+    "DOWNLOAD STARTING...";
+
+  const downloadUrl =
+    BACKEND_URL +
+    "/download?url=" +
+    encodeURIComponent(url);
+
+  window.location.href =
+    downloadUrl;
+}
+
+
+/* URL INPUT */
+
+document
+  .getElementById("url")
+  .addEventListener("input", function () {
+
+    const url =
+      this.value.trim();
+
+    const options =
+      document.getElementById("options");
+
+    const clearButton =
+      document.getElementById("clearButton");
+
+    /*
+      URL paste karte waqt
+      koi VALID/INVALID message nahi.
+    */
+
+    document.getElementById("message")
+      .textContent = "";
+
+    if (url) {
 
       options.style.display = "block";
 
       clearButton.style.display = "block";
 
-      message.textContent =
-        "SELECT WHAT YOU WANT TO DOWNLOAD.";
-    }
+    } else {
 
+      options.style.display = "none";
 
-    function selectImage() {
-
-      selectedType = "IMAGE";
+      clearButton.style.display = "none";
 
       document.getElementById("videoOptions")
         .style.display = "none";
 
       document.getElementById("qualitySection")
         .style.display = "none";
-
-      document.getElementById("message")
-        .textContent =
-        "IMAGE DOWNLOAD SELECTED.";
-    }
-
-
-    function selectProfileDP() {
-
-      selectedType = "PROFILE DP";
-
-      document.getElementById("videoOptions")
-        .style.display = "none";
-
-      document.getElementById("qualitySection")
-        .style.display = "none";
-
-      document.getElementById("message")
-        .textContent =
-        "PROFILE DP DOWNLOAD SELECTED.";
-    }
-
-
-    function showVideoOptions() {
-
-      document.getElementById("videoOptions")
-        .style.display = "block";
-
-      document.getElementById("qualitySection")
-        .style.display = "none";
-
-      document.getElementById("message")
-        .textContent =
-        "SELECT VIDEO TYPE.";
-    }
-
-
-    function selectType(type) {
-
-      selectedType = type;
-
-      document.getElementById("qualitySection")
-        .style.display = "block";
-
-      document.getElementById("message")
-        .textContent =
-        type.toUpperCase() +
-        " SELECTED. SELECT QUALITY.";
-    }
-
-
-    function downloadMedia(quality) {
-
-      const url =
-        document.getElementById("url").value.trim();
-
-      const message =
-        document.getElementById("message");
-
-      if (!url) {
-
-        message.textContent =
-          "PLEASE PASTE A URL FIRST.";
-
-        return;
-      }
-
-      if (!selectedType) {
-
-        message.textContent =
-          "PLEASE SELECT DOWNLOAD TYPE.";
-
-        return;
-      }
-
-      message.textContent =
-        "DOWNLOAD STARTING...";
-
-      const downloadUrl =
-        BACKEND_URL +
-        "/download?url=" +
-        encodeURIComponent(url);
-
-      window.location.href =
-        downloadUrl;
-    }
-
-
-    function clearAll() {
-
-      document.getElementById("url").value = "";
-
-      document.getElementById("options")
-        .style.display = "none";
-
-      document.getElementById("videoOptions")
-        .style.display = "none";
-
-      document.getElementById("qualitySection")
-        .style.display = "none";
-
-      document.getElementById("clearButton")
-        .style.display = "none";
-
-      document.getElementById("message")
-        .textContent = "";
 
       selectedType = "";
     }
 
-  </script>
+  });
+
+
+/* CLEAR */
+
+function clearAll() {
+
+  document.getElementById("url").value = "";
+
+  document.getElementById("options")
+    .style.display = "none";
+
+  document.getElementById("videoOptions")
+    .style.display = "none";
+
+  document.getElementById("qualitySection")
+    .style.display = "none";
+
+  document.getElementById("clearButton")
+    .style.display = "none";
+
+  document.getElementById("message")
+    .textContent = "";
+
+  selectedType = "";
+}
+
+</script>
 
 </body>
 </html>
