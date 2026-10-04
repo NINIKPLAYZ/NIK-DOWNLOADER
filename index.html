@@ -110,6 +110,11 @@
       color: white;
     }
 
+    .image-download {
+      background: #f59e0b;
+      color: white;
+    }
+
     #options {
       display: none;
       margin-top: 20px;
@@ -121,6 +126,19 @@
 
     #qualitySection {
       display: none;
+    }
+
+    #thumbnailSection {
+      display: none;
+      margin-top: 15px;
+    }
+
+    #thumbnailPreview {
+      display: none;
+      width: 100%;
+      border-radius: 12px;
+      margin-top: 15px;
+      border: 1px solid #cbd5e1;
     }
 
     .section-title {
@@ -138,8 +156,6 @@
       font-size: 14px;
       min-height: 20px;
     }
-
-    /* AUTOMATIC DARK MODE */
 
     @media (prefers-color-scheme: dark) {
 
@@ -188,7 +204,7 @@
       Download available media from supported sources
     </p>
 
-    <!-- URL BOX -->
+    <!-- URL -->
 
     <input
       id="url"
@@ -196,7 +212,7 @@
       placeholder="PASTE URL HERE"
     >
 
-    <!-- DOWNLOAD BUTTON -->
+    <!-- DOWNLOAD -->
 
     <button
       class="download-main"
@@ -205,7 +221,7 @@
       DOWNLOAD
     </button>
 
-    <!-- CLEAR BUTTON -->
+    <!-- CLEAR -->
 
     <button
       id="clearBtn"
@@ -217,7 +233,7 @@
     </button>
 
 
-    <!-- DOWNLOAD OPTIONS -->
+    <!-- OPTIONS -->
 
     <div id="options">
 
@@ -226,7 +242,7 @@
       </div>
 
 
-      <!-- IMAGE -->
+      <!-- IMAGE DOWNLOAD -->
 
       <button
         class="option"
@@ -254,6 +270,40 @@
       >
         VIDEO DOWNLOAD
       </button>
+
+
+      <!-- THUMBNAIL -->
+
+      <div id="thumbnailSection">
+
+        <div class="section-title">
+          VIDEO THUMBNAIL
+        </div>
+
+        <canvas
+          id="thumbnailCanvas"
+          style="display:none;"
+        ></canvas>
+
+        <video
+          id="videoPreview"
+          style="display:none;"
+          crossorigin="anonymous"
+        ></video>
+
+        <img
+          id="thumbnailPreview"
+          alt="Video Thumbnail"
+        >
+
+        <button
+          class="image-download"
+          onclick="downloadThumbnail()"
+        >
+          DOWNLOAD IMAGE
+        </button>
+
+      </div>
 
 
       <!-- VIDEO TYPES -->
@@ -340,9 +390,10 @@
   <script>
 
     let selectedType = "";
+    let thumbnailData = "";
 
 
-    /* SHOW DOWNLOAD OPTIONS */
+    /* SHOW OPTIONS */
 
     function showOptions() {
 
@@ -383,13 +434,12 @@
       document.getElementById("qualitySection")
         .style.display = "none";
 
-      document.getElementById("message")
-        .textContent =
-        "IMAGE DOWNLOAD SELECTED.";
+      generateThumbnail();
+
     }
 
 
-    /* PROFILE DP DOWNLOAD */
+    /* PROFILE DP */
 
     function selectProfileDP() {
 
@@ -401,13 +451,16 @@
       document.getElementById("qualitySection")
         .style.display = "none";
 
+      document.getElementById("thumbnailSection")
+        .style.display = "none";
+
       document.getElementById("message")
         .textContent =
         "PROFILE DP DOWNLOAD SELECTED.";
     }
 
 
-    /* SHOW VIDEO OPTIONS */
+    /* VIDEO OPTIONS */
 
     function showVideoOptions() {
 
@@ -417,13 +470,16 @@
       document.getElementById("qualitySection")
         .style.display = "none";
 
+      document.getElementById("thumbnailSection")
+        .style.display = "none";
+
       document.getElementById("message")
         .textContent =
         "SELECT VIDEO TYPE.";
     }
 
 
-    /* SELECT VIDEO TYPE */
+    /* VIDEO TYPE */
 
     function selectType(type) {
 
@@ -432,6 +488,9 @@
       document.getElementById("qualitySection")
         .style.display = "block";
 
+      document.getElementById("thumbnailSection")
+        .style.display = "none";
+
       document.getElementById("message")
         .textContent =
         type.toUpperCase() +
@@ -439,7 +498,139 @@
     }
 
 
-    /* DOWNLOAD */
+    /* GENERATE VIDEO THUMBNAIL */
+
+    function generateThumbnail() {
+
+      const url =
+        document.getElementById("url").value.trim();
+
+      const video =
+        document.getElementById("videoPreview");
+
+      const canvas =
+        document.getElementById("thumbnailCanvas");
+
+      const image =
+        document.getElementById("thumbnailPreview");
+
+      const message =
+        document.getElementById("message");
+
+
+      if (!url) {
+
+        message.textContent =
+          "PLEASE PASTE A VIDEO URL FIRST.";
+
+        return;
+      }
+
+
+      document.getElementById("thumbnailSection")
+        .style.display = "block";
+
+      message.textContent =
+        "CREATING VIDEO THUMBNAIL...";
+
+
+      video.src = url;
+      video.muted = true;
+      video.currentTime = 1;
+
+
+      video.onloadedmetadata = function() {
+
+        if (video.duration < 1) {
+          video.currentTime = 0;
+        }
+
+      };
+
+
+      video.onseeked = function() {
+
+        try {
+
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+
+          const ctx =
+            canvas.getContext("2d");
+
+          ctx.drawImage(
+            video,
+            0,
+            0,
+            canvas.width,
+            canvas.height
+          );
+
+          thumbnailData =
+            canvas.toDataURL("image/jpeg", 0.9);
+
+          image.src = thumbnailData;
+
+          image.style.display = "block";
+
+          message.textContent =
+            "THUMBNAIL READY. CLICK DOWNLOAD IMAGE.";
+
+        } catch (error) {
+
+          message.textContent =
+            "THUMBNAIL COULD NOT BE CREATED. THE VIDEO SERVER MAY BLOCK BROWSER ACCESS.";
+
+        }
+
+      };
+
+
+      video.onerror = function() {
+
+        message.textContent =
+          "VIDEO URL COULD NOT BE LOADED.";
+      };
+
+    }
+
+
+    /* DOWNLOAD THUMBNAIL */
+
+    function downloadThumbnail() {
+
+      if (!thumbnailData) {
+
+        document.getElementById("message")
+          .textContent =
+          "THUMBNAIL IS NOT READY.";
+
+        return;
+      }
+
+
+      const link =
+        document.createElement("a");
+
+      link.href = thumbnailData;
+
+      link.download =
+        "NIK-Downloader-Thumbnail.jpg";
+
+      document.body.appendChild(link);
+
+      link.click();
+
+      document.body.removeChild(link);
+
+
+      document.getElementById("message")
+        .textContent =
+        "THUMBNAIL DOWNLOAD STARTED.";
+    }
+
+
+    /* VIDEO DOWNLOAD */
 
     function downloadMedia(quality) {
 
@@ -459,6 +650,7 @@
         return;
       }
 
+
       document.getElementById("message")
         .textContent =
         "PREPARING " +
@@ -467,14 +659,16 @@
         quality +
         "...";
 
+
       /*
-        ACTUAL DOWNLOAD BACKEND/API
-        WILL BE CONNECTED HERE.
+        ACTUAL VIDEO DOWNLOAD BACKEND
+        NEEDS TO BE CONNECTED HERE.
 
         Only content that the user is
         authorized/permitted to download
         should be processed.
       */
+
 
       alert(
         "DOWNLOAD SELECTED\n\n" +
@@ -482,6 +676,7 @@
         "\nQUALITY: " + quality +
         "\n\nBACKEND DOWNLOAD SYSTEM NEEDS TO BE CONNECTED."
       );
+
     }
 
 
@@ -489,45 +684,38 @@
 
     function clearAll() {
 
-      /* Clear URL */
-
       document.getElementById("url")
         .value = "";
-
-
-      /* Hide all download options */
 
       document.getElementById("options")
         .style.display = "none";
 
-
-      /* Hide video options */
-
       document.getElementById("videoOptions")
         .style.display = "none";
-
-
-      /* Hide quality options */
 
       document.getElementById("qualitySection")
         .style.display = "none";
 
-
-      /* Hide CLEAR button */
+      document.getElementById("thumbnailSection")
+        .style.display = "none";
 
       document.getElementById("clearBtn")
         .style.display = "none";
 
+      document.getElementById("thumbnailPreview")
+        .style.display = "none";
 
-      /* Clear message */
+      document.getElementById("thumbnailPreview")
+        .src = "";
+
+      document.getElementById("videoPreview")
+        .src = "";
 
       document.getElementById("message")
         .textContent = "";
 
-
-      /* Reset selected type */
-
       selectedType = "";
+      thumbnailData = "";
     }
 
   </script>
