@@ -31,10 +31,8 @@ body {
   max-width: 520px;
 
   background: white;
-
   border: 1px solid #e2e8f0;
   border-radius: 22px;
-
   padding: 25px;
 
   box-shadow: 0 10px 35px rgba(0,0,0,.12);
@@ -59,7 +57,6 @@ input {
 
   border: 1px solid #cbd5e1;
   outline: none;
-
   border-radius: 12px;
 
   background: white;
@@ -79,7 +76,6 @@ input::placeholder {
 
 button {
   width: 100%;
-
   border: none;
   border-radius: 12px;
 
@@ -88,7 +84,6 @@ button {
 
   font-size: 16px;
   font-weight: bold;
-
   cursor: pointer;
 }
 
@@ -104,6 +99,16 @@ button {
 
 .quality {
   background: #2563eb;
+  color: white;
+}
+
+.find-btn {
+  background: #2563eb;
+  color: white;
+}
+
+.download-btn {
+  background: #16a34a;
   color: white;
 }
 
@@ -128,6 +133,18 @@ button {
   display: none;
 }
 
+#videoResult {
+  display: none;
+  margin-top: 18px;
+}
+
+.preview {
+  width: 100%;
+  border-radius: 12px;
+  background: #000;
+  margin-top: 10px;
+}
+
 .section-title {
   margin-top: 18px;
   margin-bottom: 8px;
@@ -141,20 +158,17 @@ button {
 
 .message {
   text-align: center;
-
   margin-top: 15px;
 
   color: #64748b;
-
   font-size: 14px;
 
   min-height: 20px;
-
   font-weight: bold;
 }
 
-.hidden {
-  display: none !important;
+.format-item {
+  margin-top: 10px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -206,7 +220,6 @@ button {
     Download available media from supported sources
   </p>
 
-  <!-- URL -->
   <input
     id="url"
     type="text"
@@ -215,7 +228,6 @@ button {
     spellcheck="false"
   >
 
-  <!-- CLEAR -->
   <button
     id="clearButton"
     class="clear-btn"
@@ -224,10 +236,8 @@ button {
     CLEAR
   </button>
 
-  <!-- OPTIONS -->
   <div id="options">
 
-    <!-- DOWNLOAD BUTTONS -->
     <div id="downloadButtons">
 
       <div class="section-title">
@@ -257,7 +267,6 @@ button {
 
     </div>
 
-    <!-- VIDEO OPTIONS -->
     <div id="videoOptions">
 
       <div class="section-title">
@@ -287,58 +296,53 @@ button {
 
     </div>
 
-    <!-- QUALITY -->
     <div id="qualitySection">
 
       <div class="section-title">
-        SELECT QUALITY
+        FIND VIDEO
       </div>
 
       <button
-        class="quality"
-        onclick="downloadMedia('360p')"
+        class="find-btn"
+        onclick="findVideo()"
       >
-        360P
+        FIND VIDEO
       </button>
 
-      <button
-        class="quality"
-        onclick="downloadMedia('480p')"
-      >
-        480P
-      </button>
+    </div>
 
-      <button
-        class="quality"
-        onclick="downloadMedia('720p HD')"
-      >
-        720P HD
-      </button>
+    <div id="videoResult">
 
-      <button
-        class="quality"
-        onclick="downloadMedia('1080p Full HD')"
-      >
-        1080P FULL HD
-      </button>
+      <div class="section-title">
+        VIDEO PREVIEW
+      </div>
+
+      <video
+        id="videoPreview"
+        class="preview"
+        controls
+        playsinline
+      ></video>
+
+      <div class="section-title">
+        AVAILABLE FORMATS
+      </div>
+
+      <div id="formatList"></div>
 
     </div>
 
   </div>
 
-  <!-- MESSAGE -->
   <p id="message" class="message"></p>
 
 </div>
 
 <script>
 
-/* BACKEND */
 const BACKEND_URL =
   "https://nik-downloader-backend.onrender.com";
 
-
-/* ELEMENTS */
 const urlInput =
   document.getElementById("url");
 
@@ -354,15 +358,24 @@ const videoOptions =
 const qualitySection =
   document.getElementById("qualitySection");
 
+const videoResult =
+  document.getElementById("videoResult");
+
+const videoPreview =
+  document.getElementById("videoPreview");
+
+const formatList =
+  document.getElementById("formatList");
+
 const message =
   document.getElementById("message");
 
-
-/* SELECTED TYPE */
 let selectedType = "";
+let foundVideos = [];
 
 
 /* URL INPUT */
+
 urlInput.addEventListener("input", function () {
 
   const url =
@@ -378,27 +391,15 @@ urlInput.addEventListener("input", function () {
 
   } else {
 
-    clearButton.style.display =
-      "none";
+    resetPage();
 
-    downloadButtons.style.display =
-      "none";
-
-    videoOptions.style.display =
-      "none";
-
-    qualitySection.style.display =
-      "none";
-
-    message.textContent = "";
-
-    selectedType = "";
   }
 
 });
 
 
-/* CHECK URL */
+/* URL CHECK */
+
 function isValidUrl(url) {
 
   try {
@@ -420,7 +421,6 @@ function isValidUrl(url) {
 }
 
 
-/* URL CHECK */
 function checkUrl() {
 
   const url =
@@ -441,11 +441,10 @@ function checkUrl() {
 
 
 /* IMAGE */
+
 function selectImage() {
 
-  if (!checkUrl()) {
-    return;
-  }
+  if (!checkUrl()) return;
 
   selectedType = "IMAGE";
 
@@ -455,17 +454,19 @@ function selectImage() {
   qualitySection.style.display =
     "none";
 
+  videoResult.style.display =
+    "none";
+
   message.textContent =
     "IMAGE DOWNLOAD SELECTED.";
 }
 
 
-/* PROFILE DP */
+/* PROFILE */
+
 function selectProfileDP() {
 
-  if (!checkUrl()) {
-    return;
-  }
+  if (!checkUrl()) return;
 
   selectedType =
     "PROFILE DP";
@@ -476,17 +477,19 @@ function selectProfileDP() {
   qualitySection.style.display =
     "none";
 
+  videoResult.style.display =
+    "none";
+
   message.textContent =
     "PROFILE DP DOWNLOAD SELECTED.";
 }
 
 
 /* VIDEO */
+
 function showVideoOptions() {
 
-  if (!checkUrl()) {
-    return;
-  }
+  if (!checkUrl()) return;
 
   selectedType = "";
 
@@ -496,40 +499,40 @@ function showVideoOptions() {
   qualitySection.style.display =
     "none";
 
+  videoResult.style.display =
+    "none";
+
   message.textContent =
     "SELECT VIDEO TYPE.";
 }
 
 
 /* VIDEO TYPE */
+
 function selectType(type) {
 
-  if (!checkUrl()) {
-    return;
-  }
+  if (!checkUrl()) return;
 
   selectedType = type;
 
   qualitySection.style.display =
     "block";
 
+  videoResult.style.display =
+    "none";
+
   message.textContent =
     type.toUpperCase() +
-    " SELECTED. SELECT QUALITY.";
+    " SELECTED. TAP FIND VIDEO.";
 }
 
 
-/* DOWNLOAD */
-async function downloadMedia(quality) {
+/* FIND VIDEO */
 
-  if (!checkUrl()) {
-    return;
-  }
+async function findVideo() {
 
-  /*
-    Only video types can use
-    the quality/download system.
-  */
+  if (!checkUrl()) return;
+
   if (
     selectedType !== "Audio Only" &&
     selectedType !== "Video Only" &&
@@ -546,63 +549,36 @@ async function downloadMedia(quality) {
     urlInput.value.trim();
 
   message.textContent =
-    "VIDEO SOURCE FINDING...";
+    "FINDING VIDEO...";
+
+  videoResult.style.display =
+    "none";
+
+  formatList.innerHTML =
+    "";
+
+  foundVideos = [];
 
   try {
 
-    /*
-      First check whether the URL itself
-      is already a direct media URL.
-    */
-    const lowerUrl =
-      url.toLowerCase();
-
-    const isDirectVideo =
-      lowerUrl.includes(".mp4") ||
-      lowerUrl.includes(".webm") ||
-      lowerUrl.includes(".mov") ||
-      lowerUrl.includes(".m4v") ||
-      lowerUrl.includes(".ogv");
-
-    if (isDirectVideo) {
-
-      message.textContent =
-        "VIDEO FOUND. DOWNLOAD STARTING...";
-
-      const directDownloadUrl =
+    const response =
+      await fetch(
         BACKEND_URL +
-        "/download?url=" +
-        encodeURIComponent(url);
-
-      window.location.href =
-        directDownloadUrl;
-
-      return;
-    }
-
-
-    /*
-      If it is an HTML page,
-      ask backend to find an openly
-      embedded video source.
-    */
-    const findUrl =
-      BACKEND_URL +
-      "/find-video?url=" +
-      encodeURIComponent(url);
-
-    const findResponse =
-      await fetch(findUrl);
+        "/find-video?url=" +
+        encodeURIComponent(url)
+      );
 
     const result =
-      await findResponse.json();
+      await response.json();
 
-    if (!findResponse.ok ||
-        !result.success) {
+    if (
+      !response.ok ||
+      !result.success
+    ) {
 
       message.textContent =
         result.message ||
-        "VIDEO SOURCE NOT FOUND.";
+        "VIDEO NOT FOUND.";
 
       return;
     }
@@ -618,45 +594,118 @@ async function downloadMedia(quality) {
       return;
     }
 
+    foundVideos =
+      result.videos;
 
     /*
-      Use first public video source.
+      Preview first available source
     */
-    const videoUrl =
-      result.videos[0];
+    videoPreview.src =
+      foundVideos[0].url ||
+      foundVideos[0];
+
+    videoPreview.load();
+
+    videoResult.style.display =
+      "block";
+
+    /*
+      Show every source returned
+      by the backend.
+    */
+    foundVideos.forEach(
+      (video, index) => {
+
+        const videoUrl =
+          video.url || video;
+
+        const type =
+          video.type ||
+          "VIDEO";
+
+        const label =
+          video.label ||
+          type.toUpperCase();
+
+        const item =
+          document.createElement("div");
+
+        item.className =
+          "format-item";
+
+        const button =
+          document.createElement("button");
+
+        button.className =
+          "download-btn";
+
+        button.textContent =
+          label;
+
+        button.onclick =
+          function () {
+
+            downloadVideo(
+              videoUrl
+            );
+
+          };
+
+        item.appendChild(button);
+
+        formatList.appendChild(item);
+
+      }
+    );
 
     message.textContent =
-      "VIDEO FOUND. DOWNLOAD STARTING...";
-
-
-    /*
-      Send direct video URL
-      to backend downloader.
-    */
-    const downloadUrl =
-      BACKEND_URL +
-      "/download?url=" +
-      encodeURIComponent(videoUrl);
-
-    window.location.href =
-      downloadUrl;
+      "VIDEO FOUND. SELECT FORMAT.";
 
   } catch (error) {
 
-    console.error(
-      "Download error:",
-      error
-    );
+    console.error(error);
 
     message.textContent =
       "VIDEO COULD NOT BE FOUND.";
   }
+}
 
+
+/* DOWNLOAD */
+
+function downloadVideo(videoUrl) {
+
+  if (!videoUrl) {
+
+    message.textContent =
+      "VIDEO URL NOT AVAILABLE.";
+
+    return;
+  }
+
+  message.textContent =
+    "DOWNLOAD STARTING...";
+
+  const downloadUrl =
+    BACKEND_URL +
+    "/download?url=" +
+    encodeURIComponent(videoUrl);
+
+  window.location.href =
+    downloadUrl;
 }
 
 
 /* CLEAR */
+
 function clearAll() {
+
+  resetPage();
+
+}
+
+
+function resetPage() {
 
   urlInput.value = "";
 
@@ -672,14 +721,27 @@ function clearAll() {
   qualitySection.style.display =
     "none";
 
+  videoResult.style.display =
+    "none";
+
+  videoPreview.pause();
+
+  videoPreview.removeAttribute("src");
+
+  videoPreview.load();
+
+  formatList.innerHTML =
+    "";
+
   message.textContent =
     "";
 
   selectedType = "";
 
+  foundVideos = [];
 }
 
 </script>
 
 </body>
-</html>
+  </html>
