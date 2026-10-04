@@ -1,209 +1,295 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>NIK DOWNLOADER</title>
+<title>NIK DOWNLOADER</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-    }
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
 
-    body {
-      min-height: 100vh;
-      background: #f1f5f9;
-      color: #0f172a;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
+body {
+  min-height: 100vh;
+  background: #f1f5f9;
+  color: #0f172a;
 
-    .container {
-      width: 100%;
-      max-width: 520px;
-      background: white;
-      border: 1px solid #e2e8f0;
-      border-radius: 22px;
-      padding: 25px;
-      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.12);
-    }
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-    h1 {
-      text-align: center;
-      font-size: 30px;
-      margin-bottom: 8px;
-    }
+  padding: 20px;
+}
 
-    .subtitle {
-      text-align: center;
-      color: #64748b;
-      margin-bottom: 25px;
-      font-size: 16px;
-    }
+.container {
+  width: 100%;
+  max-width: 520px;
 
-    input {
-      width: 100%;
-      padding: 15px;
-      border: 1px solid #cbd5e1;
-      outline: none;
-      border-radius: 12px;
-      background: white;
-      color: #111827;
-      font-size: 16px;
-      margin-bottom: 12px;
-      text-align: center;
-    }
+  background: white;
 
-    input:focus {
-      border-color: #2563eb;
-    }
+  border: 1px solid #e2e8f0;
+  border-radius: 22px;
 
-    input::placeholder {
-      text-align: center;
-    }
+  padding: 25px;
 
-    button {
-      width: 100%;
-      border: none;
-      border-radius: 12px;
-      padding: 14px;
-      margin-top: 10px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+  box-shadow: 0 10px 35px rgba(0,0,0,.12);
+}
 
-    .clear-btn {
-      background: #ef4444;
-      color: white;
-    }
 
-    .option {
-      background: #e2e8f0;
-      color: #0f172a;
-    }
+/* URL */
 
-    .quality {
-      background: #2563eb;
-      color: white;
-    }
+input {
+  width: 100%;
 
-    /* Main options always visible */
-    #options {
-      display: block;
-    }
+  padding: 15px;
 
-    /* CLEAR hidden until URL is entered */
-    #clearButton {
-      display: none;
-    }
+  border: 1px solid #cbd5e1;
+  outline: none;
 
-    /* Video options hidden initially */
-    #videoOptions,
-    #qualitySection {
-      display: none;
-    }
+  border-radius: 12px;
 
-    .section-title {
-      margin-top: 18px;
-      margin-bottom: 8px;
-      font-size: 15px;
-      color: #64748b;
-      font-weight: bold;
-      text-align: center;
-    }
+  background: white;
+  color: #111827;
 
-    .message {
-      text-align: center;
-      margin-top: 15px;
-      color: #64748b;
-      font-size: 14px;
-      min-height: 20px;
-      font-weight: bold;
-    }
+  font-size: 16px;
 
-    @media (prefers-color-scheme: dark) {
+  text-align: center;
+}
 
-      body {
-        background: #0f172a;
-        color: #f8fafc;
-      }
+input:focus {
+  border-color: #2563eb;
+}
 
-      .container {
-        background: #1e293b;
-        border-color: #334155;
-      }
+input::placeholder {
+  text-align: center;
+}
 
-      .subtitle,
-      .section-title {
-        color: #cbd5e1;
-      }
 
-      .message {
-        color: #cbd5e1;
-      }
+/* CLEAR */
 
-      input {
-        background: #0f172a;
-        color: white;
-        border-color: #475569;
-      }
+.clear-btn {
+  width: 100%;
 
-      input::placeholder {
-        color: #94a3b8;
-      }
+  padding: 13px;
 
-      .option {
-        background: #334155;
-        color: white;
-      }
-    }
-  </style>
+  margin-top: 10px;
+
+  background: #ef4444;
+  color: white;
+
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+
+  border-radius: 50px;
+
+  font-size: 16px;
+  font-weight: bold;
+
+  cursor: pointer;
+}
+
+
+/* DOWNLOAD BUTTONS */
+
+.option,
+.quality {
+  width: auto;
+  min-width: 180px;
+
+  display: block;
+
+  margin: 10px auto;
+
+  padding: 12px 24px;
+
+  background: transparent !important;
+
+  color: #0f172a;
+
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+
+  border-radius: 50px;
+
+  font-size: 16px;
+  font-weight: bold;
+
+  cursor: pointer;
+}
+
+
+/* QUALITY */
+
+.quality {
+  color: #2563eb;
+}
+
+
+/* REMOVE BUTTON FRAME */
+
+.option:hover,
+.option:active,
+.option:focus,
+.quality:hover,
+.quality:active,
+.quality:focus {
+
+  background: transparent !important;
+
+  border: none !important;
+
+  outline: none !important;
+
+  box-shadow: none !important;
+}
+
+
+/* OPTIONS */
+
+#clearButton {
+  display: none;
+}
+
+#options {
+  min-height: 430px;
+  padding-top: 10px;
+}
+
+#downloadButtons {
+  display: none;
+}
+
+#videoOptions {
+  display: none;
+}
+
+#qualitySection {
+  display: none;
+}
+
+
+/* SECTION TITLE */
+
+.section-title {
+  margin-top: 18px;
+  margin-bottom: 8px;
+
+  font-size: 15px;
+
+  color: #64748b;
+
+  font-weight: bold;
+
+  text-align: center;
+}
+
+
+/* MESSAGE */
+
+.message {
+  text-align: center;
+
+  margin-top: 15px;
+
+  color: #64748b;
+
+  font-size: 14px;
+
+  min-height: 20px;
+
+  font-weight: bold;
+}
+
+
+/* DARK MODE */
+
+@media (prefers-color-scheme: dark) {
+
+  body {
+    background: #0f172a;
+    color: #f8fafc;
+  }
+
+  .container {
+    background: #1e293b;
+    border-color: #334155;
+  }
+
+  input {
+    background: #0f172a;
+    color: white;
+    border-color: #475569;
+  }
+
+  input::placeholder {
+    color: #94a3b8;
+  }
+
+  .option {
+    color: white;
+  }
+
+  .quality {
+    color: #60a5fa;
+  }
+
+  .section-title,
+  .message {
+    color: #cbd5e1;
+  }
+}
+
+</style>
 </head>
+
 
 <body>
 
-  <div class="container">
+<div class="container">
 
-    <h1>NIK DOWNLOADER</h1>
+  <!-- URL -->
 
-    <p class="subtitle">
-      Download available media from supported sources
-    </p>
-
-    <!-- URL INPUT -->
-    <input
-      id="url"
-      type="text"
-      placeholder="PASTE URL HERE"
-      autocomplete="off"
-    >
-
-    <!-- CLEAR BUTTON -->
-    <button
-      id="clearButton"
-      class="clear-btn"
-      onclick="clearAll()"
-    >
-      CLEAR
-    </button>
+  <input
+    id="url"
+    type="text"
+    placeholder="PASTE URL HERE"
+    autocomplete="off"
+    spellcheck="false"
+  >
 
 
-    <!-- MAIN OPTIONS -->
-    <div id="options">
+  <!-- CLEAR -->
+
+  <button
+    id="clearButton"
+    class="clear-btn"
+    onclick="clearAll()"
+  >
+    CLEAR
+  </button>
+
+
+  <!-- OPTIONS -->
+
+  <div id="options">
+
+
+    <!-- DOWNLOAD TYPES -->
+
+    <div id="downloadButtons">
 
       <div class="section-title">
         SELECT DOWNLOAD TYPE
       </div>
 
 
-      <!-- IMAGE DOWNLOAD -->
       <button
         class="option"
         onclick="selectImage()"
@@ -212,7 +298,6 @@
       </button>
 
 
-      <!-- PROFILE DP DOWNLOAD -->
       <button
         class="option"
         onclick="selectProfileDP()"
@@ -221,7 +306,6 @@
       </button>
 
 
-      <!-- VIDEO DOWNLOAD -->
       <button
         class="option"
         onclick="showVideoOptions()"
@@ -229,416 +313,388 @@
         VIDEO DOWNLOAD
       </button>
 
-
-      <!-- VIDEO TYPE -->
-      <div id="videoOptions">
-
-        <div class="section-title">
-          SELECT VIDEO TYPE
-        </div>
+    </div>
 
 
-        <button
-          class="option"
-          onclick="selectType('Audio Only')"
-        >
-          AUDIO ONLY
-        </button>
+    <!-- VIDEO TYPES -->
 
+    <div id="videoOptions">
 
-        <button
-          class="option"
-          onclick="selectType('Video Only')"
-        >
-          VIDEO ONLY
-        </button>
-
-
-        <button
-          class="option"
-          onclick="selectType('Video + Audio')"
-        >
-          VIDEO + AUDIO
-        </button>
-
+      <div class="section-title">
+        SELECT VIDEO TYPE
       </div>
 
 
-      <!-- QUALITY -->
-      <div id="qualitySection">
-
-        <div class="section-title">
-          SELECT QUALITY
-        </div>
-
-
-        <button
-          class="quality"
-          onclick="downloadMedia('360p')"
-        >
-          360P
-        </button>
+      <button
+        class="option"
+        onclick="selectType('Audio Only')"
+      >
+        AUDIO ONLY
+      </button>
 
 
-        <button
-          class="quality"
-          onclick="downloadMedia('480p')"
-        >
-          480P
-        </button>
+      <button
+        class="option"
+        onclick="selectType('Video Only')"
+      >
+        VIDEO ONLY
+      </button>
 
 
-        <button
-          class="quality"
-          onclick="downloadMedia('720p HD')"
-        >
-          720P HD
-        </button>
-
-
-        <button
-          class="quality"
-          onclick="downloadMedia('1080p Full HD')"
-        >
-          1080P FULL HD
-        </button>
-
-      </div>
+      <button
+        class="option"
+        onclick="selectType('Video + Audio')"
+      >
+        VIDEO + AUDIO
+      </button>
 
     </div>
 
 
-    <!-- MESSAGE -->
-    <p
-      id="message"
-      class="message"
-    ></p>
+    <!-- QUALITY -->
+
+    <div id="qualitySection">
+
+      <div class="section-title">
+        SELECT QUALITY
+      </div>
+
+
+      <button
+        class="quality"
+        onclick="downloadMedia('360p')"
+      >
+        360P
+      </button>
+
+
+      <button
+        class="quality"
+        onclick="downloadMedia('480p')"
+      >
+        480P
+      </button>
+
+
+      <button
+        class="quality"
+        onclick="downloadMedia('720p HD')"
+      >
+        720P HD
+      </button>
+
+
+      <button
+        class="quality"
+        onclick="downloadMedia('1080p Full HD')"
+      >
+        1080P FULL HD
+      </button>
+
+    </div>
 
   </div>
 
 
-  <script>
+  <!-- MESSAGE -->
 
-    const BACKEND_URL =
-      "https://nik-downloader-backend.onrender.com";
+  <p
+    id="message"
+    class="message"
+  ></p>
 
-    let selectedType = "";
+</div>
 
 
-    /*
-      URL INPUT
-      CLEAR BUTTON SHOW/HIDE
-    */
+<script>
 
-    const urlInput =
-      document.getElementById("url");
+const BACKEND_URL =
+  "https://nik-downloader-backend.onrender.com";
 
-    const clearButton =
-      document.getElementById("clearButton");
 
+const urlInput =
+  document.getElementById("url");
 
-    urlInput.addEventListener("input", function () {
+const clearButton =
+  document.getElementById("clearButton");
 
-      const url =
-        this.value.trim();
+const downloadButtons =
+  document.getElementById("downloadButtons");
 
+const videoOptions =
+  document.getElementById("videoOptions");
 
-      /*
-        URL hai -> CLEAR show
-      */
+const qualitySection =
+  document.getElementById("qualitySection");
 
-      if (url) {
+const message =
+  document.getElementById("message");
 
-        clearButton.style.display = "block";
 
-      } else {
+let selectedType = "";
 
-        clearButton.style.display = "none";
 
-      }
+/* URL INPUT */
 
+urlInput.addEventListener("input", function() {
 
-      /*
-        Purana message remove
-      */
+  const url =
+    this.value.trim();
 
-      document.getElementById("message")
-        .textContent = "";
 
-    });
+  if (url) {
 
+    clearButton.style.display =
+      "block";
 
-    /*
-      URL VALIDATION
-    */
+    downloadButtons.style.display =
+      "block";
 
-    function isValidUrl(url) {
+  } else {
 
-      try {
+    clearButton.style.display =
+      "none";
 
-        const parsed =
-          new URL(url);
+    downloadButtons.style.display =
+      "none";
 
-        return (
-          parsed.protocol === "http:" ||
-          parsed.protocol === "https:"
-        );
+    videoOptions.style.display =
+      "none";
 
-      } catch {
+    qualitySection.style.display =
+      "none";
 
-        return false;
+    message.textContent =
+      "";
 
-      }
+    selectedType =
+      "";
+  }
 
-    }
+});
 
 
-    /*
-      CHECK URL
-      Sirf button click par chalega
-    */
+/* VALID URL */
 
-    function checkUrl() {
+function isValidUrl(url) {
 
-      const url =
-        document.getElementById("url")
-          .value.trim();
+  try {
 
-      const message =
-        document.getElementById("message");
+    const parsed =
+      new URL(url);
 
+    return (
+      parsed.protocol === "http:" ||
+      parsed.protocol === "https:"
+    );
 
-      if (!url || !isValidUrl(url)) {
+  } catch {
 
-        message.textContent =
-          "✕ INVALID URL";
+    return false;
 
-        return false;
+  }
 
-      }
+}
 
 
-      message.textContent = "";
+/* CHECK URL */
 
-      return true;
+function checkUrl() {
 
-    }
+  const url =
+    urlInput.value.trim();
 
 
-    /*
-      IMAGE DOWNLOAD
-    */
+  if (
+    !url ||
+    !isValidUrl(url)
+  ) {
 
-    function selectImage() {
+    message.textContent =
+      "✕ INVALID URL";
 
-      if (!checkUrl()) {
-        return;
-      }
+    return false;
+  }
 
 
-      selectedType =
-        "IMAGE";
+  message.textContent =
+    "";
 
+  return true;
+}
 
-      document.getElementById("videoOptions")
-        .style.display = "none";
 
+/* IMAGE */
 
-      document.getElementById("qualitySection")
-        .style.display = "none";
+function selectImage() {
 
+  if (!checkUrl()) {
+    return;
+  }
 
-      document.getElementById("message")
-        .textContent =
-        "IMAGE DOWNLOAD SELECTED.";
 
-    }
+  selectedType =
+    "IMAGE";
 
 
-    /*
-      PROFILE DP DOWNLOAD
-    */
+  videoOptions.style.display =
+    "none";
 
-    function selectProfileDP() {
 
-      if (!checkUrl()) {
-        return;
-      }
+  qualitySection.style.display =
+    "none";
 
 
-      selectedType =
-        "PROFILE DP";
+  message.textContent =
+    "IMAGE DOWNLOAD SELECTED.";
+}
 
 
-      document.getElementById("videoOptions")
-        .style.display = "none";
+/* PROFILE DP */
 
+function selectProfileDP() {
 
-      document.getElementById("qualitySection")
-        .style.display = "none";
+  if (!checkUrl()) {
+    return;
+  }
 
 
-      document.getElementById("message")
-        .textContent =
-        "PROFILE DP DOWNLOAD SELECTED.";
+  selectedType =
+    "PROFILE DP";
 
-    }
 
+  videoOptions.style.display =
+    "none";
 
-    /*
-      VIDEO DOWNLOAD
-    */
 
-    function showVideoOptions() {
+  qualitySection.style.display =
+    "none";
 
-      if (!checkUrl()) {
-        return;
-      }
 
+  message.textContent =
+    "PROFILE DP DOWNLOAD SELECTED.";
+}
 
-      selectedType = "";
 
+/* VIDEO */
 
-      document.getElementById("videoOptions")
-        .style.display = "block";
+function showVideoOptions() {
 
+  if (!checkUrl()) {
+    return;
+  }
 
-      document.getElementById("qualitySection")
-        .style.display = "none";
 
+  selectedType =
+    "";
 
-      document.getElementById("message")
-        .textContent =
-        "SELECT VIDEO TYPE.";
 
-    }
+  videoOptions.style.display =
+    "block";
 
 
-    /*
-      VIDEO TYPE
-    */
+  qualitySection.style.display =
+    "none";
 
-    function selectType(type) {
 
-      if (!checkUrl()) {
-        return;
-      }
+  message.textContent =
+    "SELECT VIDEO TYPE.";
+}
 
 
-      selectedType =
-        type;
+/* VIDEO TYPE */
 
+function selectType(type) {
 
-      document.getElementById("qualitySection")
-        .style.display = "block";
+  if (!checkUrl()) {
+    return;
+  }
 
 
-      document.getElementById("message")
-        .textContent =
-        type.toUpperCase() +
-        " SELECTED. SELECT QUALITY.";
+  selectedType =
+    type;
 
-    }
 
+  qualitySection.style.display =
+    "block";
 
-    /*
-      DOWNLOAD
-    */
 
-    function downloadMedia(quality) {
+  message.textContent =
+    type.toUpperCase() +
+    " SELECTED. SELECT QUALITY.";
+}
 
-      if (!checkUrl()) {
-        return;
-      }
 
+/* DOWNLOAD */
 
-      if (!selectedType) {
+function downloadMedia(quality) {
 
-        document.getElementById("message")
-          .textContent =
-          "PLEASE SELECT DOWNLOAD TYPE.";
+  if (!checkUrl()) {
+    return;
+  }
 
-        return;
 
-      }
+  if (!selectedType) {
 
+    message.textContent =
+      "PLEASE SELECT DOWNLOAD TYPE.";
 
-      const url =
-        document.getElementById("url")
-          .value.trim();
+    return;
+  }
 
 
-      document.getElementById("message")
-        .textContent =
-        "DOWNLOAD STARTING...";
+  const url =
+    urlInput.value.trim();
 
 
-      const downloadUrl =
-        BACKEND_URL +
-        "/download?url=" +
-        encodeURIComponent(url);
+  message.textContent =
+    "DOWNLOAD STARTING...";
 
 
-      window.location.href =
-        downloadUrl;
+  const downloadUrl =
+    BACKEND_URL +
+    "/download?url=" +
+    encodeURIComponent(url);
 
-    }
 
+  window.location.href =
+    downloadUrl;
+}
 
-    /*
-      CLEAR
-    */
 
-    function clearAll() {
+/* CLEAR */
 
-      /*
-        URL remove
-      */
+function clearAll() {
 
-      urlInput.value = "";
+  urlInput.value =
+    "";
 
 
-      /*
-        CLEAR button hide
-      */
+  clearButton.style.display =
+    "none";
 
-      clearButton.style.display =
-        "none";
 
+  downloadButtons.style.display =
+    "none";
 
-      /*
-        Video options hide
-      */
 
-      document.getElementById("videoOptions")
-        .style.display = "none";
+  videoOptions.style.display =
+    "none";
 
 
-      /*
-        Quality options hide
-      */
+  qualitySection.style.display =
+    "none";
 
-      document.getElementById("qualitySection")
-        .style.display = "none";
 
+  message.textContent =
+    "";
 
-      /*
-        Message clear
-      */
 
-      document.getElementById("message")
-        .textContent = "";
+  selectedType =
+    "";
+}
 
-
-      /*
-        Selected type reset
-      */
-
-      selectedType = "";
-
-    }
-
-  </script>
+</script>
 
 </body>
 </html>
