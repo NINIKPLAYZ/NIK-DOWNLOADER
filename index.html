@@ -1,30 +1,439 @@
-async function downloadMedia(quality) {
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  const url = document.getElementById("url").value.trim();
-  const message = document.getElementById("message");
+  <title>NIK DOWNLOADER</title>
 
-  if (!url) {
-    message.textContent = "PLEASE PASTE A URL FIRST.";
-    return;
-  }
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
 
-  if (!selectedType) {
-    message.textContent = "PLEASE SELECT DOWNLOAD TYPE.";
-    return;
-  }
+    body {
+      min-height: 100vh;
+      background: #f1f5f9;
+      color: #0f172a;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
 
-  message.textContent = "PREPARING DOWNLOAD...";
+    .container {
+      width: 100%;
+      max-width: 520px;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 22px;
+      padding: 25px;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.12);
+    }
 
-  const backend =
-    "https://nik-downloader-backend.onrender.com";
+    h1 {
+      text-align: center;
+      font-size: 30px;
+      margin-bottom: 8px;
+    }
 
-  const downloadUrl =
-    backend +
-    "/download?url=" +
-    encodeURIComponent(url);
+    .subtitle {
+      text-align: center;
+      color: #64748b;
+      margin-bottom: 25px;
+    }
 
-  message.textContent =
-    "DOWNLOAD STARTING...";
+    input {
+      width: 100%;
+      padding: 15px;
+      border: 1px solid #cbd5e1;
+      outline: none;
+      border-radius: 12px;
+      background: white;
+      color: #111827;
+      font-size: 16px;
+      margin-bottom: 12px;
+      text-align: center;
+    }
 
-  window.location.href = downloadUrl;
-}
+    input::placeholder {
+      text-align: center;
+    }
+
+    button {
+      width: 100%;
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      margin-top: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .download-main {
+      background: #22c55e;
+      color: white;
+    }
+
+    .clear-btn {
+      background: #ef4444;
+      color: white;
+    }
+
+    .option {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    .quality {
+      background: #2563eb;
+      color: white;
+    }
+
+    #options,
+    #clearButton,
+    #videoOptions,
+    #qualitySection {
+      display: none;
+    }
+
+    .section-title {
+      margin-top: 18px;
+      margin-bottom: 8px;
+      font-size: 15px;
+      color: #64748b;
+      font-weight: bold;
+    }
+
+    .message {
+      text-align: center;
+      margin-top: 15px;
+      color: #64748b;
+      font-size: 14px;
+      min-height: 20px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      body {
+        background: #0f172a;
+        color: #f8fafc;
+      }
+
+      .container {
+        background: #1e293b;
+        border-color: #334155;
+      }
+
+      .subtitle,
+      .section-title,
+      .message {
+        color: #cbd5e1;
+      }
+
+      .option {
+        background: #334155;
+        color: white;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <h1>NIK DOWNLOADER</h1>
+
+    <p class="subtitle">
+      Download available media from supported sources
+    </p>
+
+    <input
+      id="url"
+      type="url"
+      placeholder="PASTE URL HERE"
+    >
+
+    <button
+      class="download-main"
+      onclick="showOptions()"
+    >
+      DOWNLOAD
+    </button>
+
+    <button
+      id="clearButton"
+      class="clear-btn"
+      onclick="clearAll()"
+    >
+      CLEAR
+    </button>
+
+    <div id="options">
+
+      <div class="section-title">
+        SELECT DOWNLOAD TYPE
+      </div>
+
+      <button
+        class="option"
+        onclick="selectImage()"
+      >
+        IMAGE DOWNLOAD
+      </button>
+
+      <button
+        class="option"
+        onclick="selectProfileDP()"
+      >
+        PROFILE DP DOWNLOAD
+      </button>
+
+      <button
+        class="option"
+        onclick="showVideoOptions()"
+      >
+        VIDEO DOWNLOAD
+      </button>
+
+      <div id="videoOptions">
+
+        <div class="section-title">
+          SELECT VIDEO TYPE
+        </div>
+
+        <button
+          class="option"
+          onclick="selectType('Audio Only')"
+        >
+          AUDIO ONLY
+        </button>
+
+        <button
+          class="option"
+          onclick="selectType('Video Only')"
+        >
+          VIDEO ONLY
+        </button>
+
+        <button
+          class="option"
+          onclick="selectType('Video + Audio')"
+        >
+          VIDEO + AUDIO
+        </button>
+
+      </div>
+
+      <div id="qualitySection">
+
+        <div class="section-title">
+          SELECT QUALITY
+        </div>
+
+        <button
+          class="quality"
+          onclick="downloadMedia('360p')"
+        >
+          360P
+        </button>
+
+        <button
+          class="quality"
+          onclick="downloadMedia('480p')"
+        >
+          480P
+        </button>
+
+        <button
+          class="quality"
+          onclick="downloadMedia('720p HD')"
+        >
+          720P HD
+        </button>
+
+        <button
+          class="quality"
+          onclick="downloadMedia('1080p Full HD')"
+        >
+          1080P FULL HD
+        </button>
+
+      </div>
+
+    </div>
+
+    <p
+      id="message"
+      class="message"
+    ></p>
+
+  </div>
+
+
+  <script>
+
+    const BACKEND_URL =
+      "https://nik-downloader-backend.onrender.com";
+
+    let selectedType = "";
+
+
+    function showOptions() {
+
+      const url =
+        document.getElementById("url").value.trim();
+
+      const options =
+        document.getElementById("options");
+
+      const clearButton =
+        document.getElementById("clearButton");
+
+      const message =
+        document.getElementById("message");
+
+      if (!url) {
+
+        message.textContent =
+          "PLEASE PASTE A URL FIRST.";
+
+        return;
+      }
+
+      options.style.display = "block";
+
+      clearButton.style.display = "block";
+
+      message.textContent =
+        "SELECT WHAT YOU WANT TO DOWNLOAD.";
+    }
+
+
+    function selectImage() {
+
+      selectedType = "IMAGE";
+
+      document.getElementById("videoOptions")
+        .style.display = "none";
+
+      document.getElementById("qualitySection")
+        .style.display = "none";
+
+      document.getElementById("message")
+        .textContent =
+        "IMAGE DOWNLOAD SELECTED.";
+    }
+
+
+    function selectProfileDP() {
+
+      selectedType = "PROFILE DP";
+
+      document.getElementById("videoOptions")
+        .style.display = "none";
+
+      document.getElementById("qualitySection")
+        .style.display = "none";
+
+      document.getElementById("message")
+        .textContent =
+        "PROFILE DP DOWNLOAD SELECTED.";
+    }
+
+
+    function showVideoOptions() {
+
+      document.getElementById("videoOptions")
+        .style.display = "block";
+
+      document.getElementById("qualitySection")
+        .style.display = "none";
+
+      document.getElementById("message")
+        .textContent =
+        "SELECT VIDEO TYPE.";
+    }
+
+
+    function selectType(type) {
+
+      selectedType = type;
+
+      document.getElementById("qualitySection")
+        .style.display = "block";
+
+      document.getElementById("message")
+        .textContent =
+        type.toUpperCase() +
+        " SELECTED. SELECT QUALITY.";
+    }
+
+
+    function downloadMedia(quality) {
+
+      const url =
+        document.getElementById("url").value.trim();
+
+      const message =
+        document.getElementById("message");
+
+      if (!url) {
+
+        message.textContent =
+          "PLEASE PASTE A URL FIRST.";
+
+        return;
+      }
+
+      if (!selectedType) {
+
+        message.textContent =
+          "PLEASE SELECT DOWNLOAD TYPE.";
+
+        return;
+      }
+
+      message.textContent =
+        "DOWNLOAD STARTING...";
+
+      const downloadUrl =
+        BACKEND_URL +
+        "/download?url=" +
+        encodeURIComponent(url);
+
+      window.location.href =
+        downloadUrl;
+    }
+
+
+    function clearAll() {
+
+      document.getElementById("url").value = "";
+
+      document.getElementById("options")
+        .style.display = "none";
+
+      document.getElementById("videoOptions")
+        .style.display = "none";
+
+      document.getElementById("qualitySection")
+        .style.display = "none";
+
+      document.getElementById("clearButton")
+        .style.display = "none";
+
+      document.getElementById("message")
+        .textContent = "";
+
+      selectedType = "";
+    }
+
+  </script>
+
+</body>
+</html>
