@@ -91,6 +91,15 @@
       background: #16a34a;
     }
 
+    .clear-btn {
+      background: #ef4444;
+      color: white;
+    }
+
+    .clear-btn:hover {
+      background: #dc2626;
+    }
+
     .option {
       background: #e2e8f0;
       color: #0f172a;
@@ -179,11 +188,15 @@
       Download available media from supported sources
     </p>
 
+    <!-- URL BOX -->
+
     <input
       id="url"
       type="url"
       placeholder="PASTE URL HERE"
     >
+
+    <!-- DOWNLOAD BUTTON -->
 
     <button
       class="download-main"
@@ -192,6 +205,19 @@
       DOWNLOAD
     </button>
 
+    <!-- CLEAR BUTTON -->
+
+    <button
+      id="clearBtn"
+      class="clear-btn"
+      onclick="clearAll()"
+      style="display:none;"
+    >
+      CLEAR
+    </button>
+
+
+    <!-- DOWNLOAD OPTIONS -->
 
     <div id="options">
 
@@ -199,6 +225,8 @@
         SELECT DOWNLOAD TYPE
       </div>
 
+
+      <!-- IMAGE -->
 
       <button
         class="option"
@@ -208,6 +236,8 @@
       </button>
 
 
+      <!-- PROFILE DP -->
+
       <button
         class="option"
         onclick="selectProfileDP()"
@@ -216,6 +246,8 @@
       </button>
 
 
+      <!-- VIDEO -->
+
       <button
         class="option"
         onclick="showVideoOptions()"
@@ -223,6 +255,8 @@
         VIDEO DOWNLOAD
       </button>
 
+
+      <!-- VIDEO TYPES -->
 
       <div id="videoOptions">
 
@@ -253,6 +287,8 @@
 
       </div>
 
+
+      <!-- QUALITY -->
 
       <div id="qualitySection">
 
@@ -306,6 +342,8 @@
     let selectedType = "";
 
 
+    /* SHOW DOWNLOAD OPTIONS */
+
     function showOptions() {
 
       const url =
@@ -325,10 +363,15 @@
       document.getElementById("options")
         .style.display = "block";
 
+      document.getElementById("clearBtn")
+        .style.display = "block";
+
       message.textContent =
         "SELECT WHAT YOU WANT TO DOWNLOAD.";
     }
 
+
+    /* IMAGE DOWNLOAD */
 
     function selectImage() {
 
@@ -346,6 +389,8 @@
     }
 
 
+    /* PROFILE DP DOWNLOAD */
+
     function selectProfileDP() {
 
       selectedType = "PROFILE DP";
@@ -362,6 +407,8 @@
     }
 
 
+    /* SHOW VIDEO OPTIONS */
+
     function showVideoOptions() {
 
       document.getElementById("videoOptions")
@@ -376,6 +423,8 @@
     }
 
 
+    /* SELECT VIDEO TYPE */
+
     function selectType(type) {
 
       selectedType = type;
@@ -389,6 +438,8 @@
         " SELECTED. SELECT QUALITY.";
     }
 
+
+    /* DOWNLOAD */
 
     function downloadMedia(quality) {
 
@@ -416,7 +467,6 @@
         quality +
         "...";
 
-
       /*
         ACTUAL DOWNLOAD BACKEND/API
         WILL BE CONNECTED HERE.
@@ -432,6 +482,52 @@
         "\nQUALITY: " + quality +
         "\n\nBACKEND DOWNLOAD SYSTEM NEEDS TO BE CONNECTED."
       );
+    }
+
+
+    /* CLEAR EVERYTHING */
+
+    function clearAll() {
+
+      /* Clear URL */
+
+      document.getElementById("url")
+        .value = "";
+
+
+      /* Hide all download options */
+
+      document.getElementById("options")
+        .style.display = "none";
+
+
+      /* Hide video options */
+
+      document.getElementById("videoOptions")
+        .style.display = "none";
+
+
+      /* Hide quality options */
+
+      document.getElementById("qualitySection")
+        .style.display = "none";
+
+
+      /* Hide CLEAR button */
+
+      document.getElementById("clearBtn")
+        .style.display = "none";
+
+
+      /* Clear message */
+
+      document.getElementById("message")
+        .textContent = "";
+
+
+      /* Reset selected type */
+
+      selectedType = "";
     }
 
   </script>
