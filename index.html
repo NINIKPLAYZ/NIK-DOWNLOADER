@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -15,8 +16,12 @@
   font-family: Arial, sans-serif;
 }
 
+
+/* PAGE BACKGROUND */
+
 body {
   min-height: 100vh;
+
   background: #f1f5f9;
   color: #0f172a;
 
@@ -27,21 +32,23 @@ body {
   padding: 20px;
 }
 
-/* MAIN CONTAINER */
+
+/* WHITE CARD */
 
 .container {
   width: 100%;
   max-width: 520px;
 
-  background: transparent;
+  background: white;
 
-  border: none;
-  border-radius: 0;
+  border: 1px solid #e2e8f0;
+  border-radius: 22px;
 
   padding: 25px;
 
-  box-shadow: none;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.12);
 }
+
 
 /* URL BOX */
 
@@ -53,9 +60,9 @@ input {
   border: 1px solid #cbd5e1;
   outline: none;
 
-  border-radius: 0;
+  border-radius: 12px;
 
-  background: transparent;
+  background: white;
   color: #111827;
 
   font-size: 16px;
@@ -72,12 +79,41 @@ input::placeholder {
   color: #64748b;
 }
 
+
+/* DOWNLOAD BUTTON */
+
+.download-btn {
+  width: 100%;
+
+  padding: 14px;
+
+  margin-top: 10px;
+
+  background: #22c55e;
+  color: white;
+
+  border: none;
+  outline: none;
+
+  border-radius: 12px;
+
+  font-size: 17px;
+  font-weight: bold;
+
+  cursor: pointer;
+}
+
+.download-btn:hover {
+  background: #16a34a;
+}
+
+
 /* CLEAR BUTTON */
 
 .clear-btn {
   width: 100%;
 
-  padding: 13px;
+  padding: 14px;
 
   margin-top: 10px;
 
@@ -86,38 +122,35 @@ input::placeholder {
 
   border: none;
   outline: none;
-  box-shadow: none;
 
-  border-radius: 0;
+  border-radius: 12px;
 
-  font-size: 16px;
+  font-size: 17px;
   font-weight: bold;
 
   cursor: pointer;
 }
 
-/* ALL DOWNLOAD BUTTONS */
+
+/* OPTIONS */
 
 .option,
 .quality {
-  width: auto;
-  min-width: 180px;
+  width: 100%;
 
   display: block;
 
   margin: 10px auto;
 
-  padding: 12px 24px;
+  padding: 15px;
 
-  background: transparent !important;
-
+  background: #e2e8f0;
   color: #0f172a;
 
-  border: none !important;
-  outline: none !important;
-  box-shadow: none !important;
+  border: none;
+  outline: none;
 
-  border-radius: 0;
+  border-radius: 12px;
 
   font-size: 16px;
   font-weight: bold;
@@ -125,33 +158,19 @@ input::placeholder {
   cursor: pointer;
 }
 
-/* QUALITY */
-
-.quality {
-  color: #2563eb;
-}
-
-/* REMOVE BUTTON EFFECTS */
-
 .option:hover,
-.option:active,
-.option:focus,
-.quality:hover,
-.quality:active,
-.quality:focus {
-
-  background: transparent !important;
-
-  border: none !important;
-
-  outline: none !important;
-
-  box-shadow: none !important;
+.quality:hover {
+  background: #cbd5e1;
 }
 
-/* HIDDEN SECTIONS */
+
+/* HIDDEN */
 
 #clearButton {
+  display: none;
+}
+
+#downloadButton {
   display: none;
 }
 
@@ -167,12 +186,13 @@ input::placeholder {
   display: none;
 }
 
+
 /* OPTIONS */
 
 #options {
-  min-height: 430px;
   padding-top: 10px;
 }
+
 
 /* SECTION TITLE */
 
@@ -185,9 +205,8 @@ input::placeholder {
   color: #64748b;
 
   font-weight: bold;
-
-  text-align: center;
 }
+
 
 /* MESSAGE */
 
@@ -205,6 +224,7 @@ input::placeholder {
   font-weight: bold;
 }
 
+
 /* DARK MODE */
 
 @media (prefers-color-scheme: dark) {
@@ -215,13 +235,15 @@ input::placeholder {
   }
 
   .container {
-    background: transparent;
-    border: none;
-    box-shadow: none;
+    background: #1e293b;
+    border-color: #334155;
+
+    box-shadow:
+      0 10px 35px rgba(0, 0, 0, 0.35);
   }
 
   input {
-    background: transparent;
+    background: #0f172a;
     color: white;
     border-color: #475569;
   }
@@ -230,26 +252,33 @@ input::placeholder {
     color: #94a3b8;
   }
 
-  .option {
+  .option,
+  .quality {
+    background: #334155;
     color: white;
   }
 
-  .quality {
-    color: #60a5fa;
+  .option:hover,
+  .quality:hover {
+    background: #475569;
   }
 
   .section-title,
   .message {
     color: #cbd5e1;
   }
+
 }
 
 </style>
+
 </head>
+
 
 <body>
 
 <div class="container">
+
 
   <!-- URL -->
 
@@ -261,6 +290,18 @@ input::placeholder {
     spellcheck="false"
   >
 
+
+  <!-- DOWNLOAD -->
+
+  <button
+    id="downloadButton"
+    class="download-btn"
+    onclick="startDownload()"
+  >
+    DOWNLOAD
+  </button>
+
+
   <!-- CLEAR -->
 
   <button
@@ -271,9 +312,11 @@ input::placeholder {
     CLEAR
   </button>
 
+
   <!-- OPTIONS -->
 
   <div id="options">
+
 
     <!-- DOWNLOAD TYPES -->
 
@@ -283,6 +326,7 @@ input::placeholder {
         SELECT DOWNLOAD TYPE
       </div>
 
+
       <button
         class="option"
         onclick="selectImage()"
@@ -290,12 +334,14 @@ input::placeholder {
         IMAGE DOWNLOAD
       </button>
 
+
       <button
         class="option"
         onclick="selectProfileDP()"
       >
         PROFILE DP DOWNLOAD
       </button>
+
 
       <button
         class="option"
@@ -306,6 +352,7 @@ input::placeholder {
 
     </div>
 
+
     <!-- VIDEO TYPES -->
 
     <div id="videoOptions">
@@ -314,6 +361,7 @@ input::placeholder {
         SELECT VIDEO TYPE
       </div>
 
+
       <button
         class="option"
         onclick="selectType('Audio Only')"
@@ -321,12 +369,14 @@ input::placeholder {
         AUDIO ONLY
       </button>
 
+
       <button
         class="option"
         onclick="selectType('Video Only')"
       >
         VIDEO ONLY
       </button>
+
 
       <button
         class="option"
@@ -337,6 +387,7 @@ input::placeholder {
 
     </div>
 
+
     <!-- QUALITY -->
 
     <div id="qualitySection">
@@ -345,12 +396,14 @@ input::placeholder {
         SELECT QUALITY
       </div>
 
+
       <button
         class="quality"
         onclick="downloadMedia('360p')"
       >
         360P
       </button>
+
 
       <button
         class="quality"
@@ -359,12 +412,14 @@ input::placeholder {
         480P
       </button>
 
+
       <button
         class="quality"
         onclick="downloadMedia('720p HD')"
       >
         720P HD
       </button>
+
 
       <button
         class="quality"
@@ -377,17 +432,33 @@ input::placeholder {
 
   </div>
 
-  <p id="message" class="message"></p>
+
+  <!-- MESSAGE -->
+
+  <p
+    id="message"
+    class="message"
+  ></p>
 
 </div>
 
+
 <script>
+
+
+/* BACKEND */
 
 const BACKEND_URL =
   "https://nik-downloader-backend.onrender.com";
 
+
+/* ELEMENTS */
+
 const urlInput =
   document.getElementById("url");
+
+const downloadButton =
+  document.getElementById("downloadButton");
 
 const clearButton =
   document.getElementById("clearButton");
@@ -404,6 +475,7 @@ const qualitySection =
 const message =
   document.getElementById("message");
 
+
 let selectedType = "";
 
 
@@ -411,35 +483,56 @@ let selectedType = "";
 
 urlInput.addEventListener("input", function() {
 
-  const url = this.value.trim();
+  const url =
+    this.value.trim();
+
 
   if (url) {
 
-    clearButton.style.display = "block";
-    downloadButtons.style.display = "block";
+    downloadButton.style.display =
+      "block";
+
+    clearButton.style.display =
+      "block";
+
+    downloadButtons.style.display =
+      "block";
 
   } else {
 
-    clearButton.style.display = "none";
-    downloadButtons.style.display = "none";
-    videoOptions.style.display = "none";
-    qualitySection.style.display = "none";
+    downloadButton.style.display =
+      "none";
 
-    message.textContent = "";
+    clearButton.style.display =
+      "none";
 
-    selectedType = "";
+    downloadButtons.style.display =
+      "none";
+
+    videoOptions.style.display =
+      "none";
+
+    qualitySection.style.display =
+      "none";
+
+    message.textContent =
+      "";
+
+    selectedType =
+      "";
   }
 
 });
 
 
-/* VALID URL */
+/* URL CHECK */
 
 function isValidUrl(url) {
 
   try {
 
-    const parsed = new URL(url);
+    const parsed =
+      new URL(url);
 
     return (
       parsed.protocol === "http:" ||
@@ -454,11 +547,13 @@ function isValidUrl(url) {
 }
 
 
-/* CHECK URL */
+/* CHECK */
 
 function checkUrl() {
 
-  const url = urlInput.value.trim();
+  const url =
+    urlInput.value.trim();
+
 
   if (!url || !isValidUrl(url)) {
 
@@ -468,9 +563,24 @@ function checkUrl() {
     return false;
   }
 
-  message.textContent = "";
+
+  message.textContent =
+    "";
 
   return true;
+}
+
+
+/* DOWNLOAD BUTTON */
+
+function startDownload() {
+
+  if (!checkUrl()) {
+    return;
+  }
+
+  message.textContent =
+    "SELECT DOWNLOAD TYPE.";
 }
 
 
@@ -480,10 +590,14 @@ function selectImage() {
 
   if (!checkUrl()) return;
 
-  selectedType = "IMAGE";
+  selectedType =
+    "IMAGE";
 
-  videoOptions.style.display = "none";
-  qualitySection.style.display = "none";
+  videoOptions.style.display =
+    "none";
+
+  qualitySection.style.display =
+    "none";
 
   message.textContent =
     "IMAGE DOWNLOAD SELECTED.";
@@ -496,10 +610,14 @@ function selectProfileDP() {
 
   if (!checkUrl()) return;
 
-  selectedType = "PROFILE DP";
+  selectedType =
+    "PROFILE DP";
 
-  videoOptions.style.display = "none";
-  qualitySection.style.display = "none";
+  videoOptions.style.display =
+    "none";
+
+  qualitySection.style.display =
+    "none";
 
   message.textContent =
     "PROFILE DP DOWNLOAD SELECTED.";
@@ -512,10 +630,14 @@ function showVideoOptions() {
 
   if (!checkUrl()) return;
 
-  selectedType = "";
+  selectedType =
+    "";
 
-  videoOptions.style.display = "block";
-  qualitySection.style.display = "none";
+  videoOptions.style.display =
+    "block";
+
+  qualitySection.style.display =
+    "none";
 
   message.textContent =
     "SELECT VIDEO TYPE.";
@@ -528,9 +650,11 @@ function selectType(type) {
 
   if (!checkUrl()) return;
 
-  selectedType = type;
+  selectedType =
+    type;
 
-  qualitySection.style.display = "block";
+  qualitySection.style.display =
+    "block";
 
   message.textContent =
     type.toUpperCase() +
@@ -540,9 +664,10 @@ function selectType(type) {
 
 /* DOWNLOAD */
 
-function downloadMedia(quality) {
+async function downloadMedia(quality) {
 
   if (!checkUrl()) return;
+
 
   if (!selectedType) {
 
@@ -552,19 +677,97 @@ function downloadMedia(quality) {
     return;
   }
 
+
   const url =
     urlInput.value.trim();
 
+
   message.textContent =
     "DOWNLOAD STARTING...";
+
 
   const downloadUrl =
     BACKEND_URL +
     "/download?url=" +
     encodeURIComponent(url);
 
-  window.location.href =
-    downloadUrl;
+
+  try {
+
+    const response =
+      await fetch(downloadUrl);
+
+
+    if (!response.ok) {
+
+      let errorMessage =
+        "VIDEO DOWNLOAD FAILED.";
+
+
+      try {
+
+        const data =
+          await response.json();
+
+
+        if (data.message) {
+          errorMessage =
+            data.message;
+        }
+
+      } catch {}
+
+
+      message.textContent =
+        "✕ " + errorMessage;
+
+      return;
+    }
+
+
+    const blob =
+      await response.blob();
+
+
+    const blobUrl =
+      URL.createObjectURL(blob);
+
+
+    const link =
+      document.createElement("a");
+
+
+    link.href =
+      blobUrl;
+
+
+    link.download =
+      "NIK DOWNLOADER";
+
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    link.remove();
+
+
+    setTimeout(() => {
+      URL.revokeObjectURL(blobUrl);
+    }, 1000);
+
+
+    message.textContent =
+      "DOWNLOAD COMPLETE.";
+
+  } catch (error) {
+
+    console.error(error);
+
+    message.textContent =
+      "✕ VIDEO DOWNLOAD FAILED.";
+  }
+
 }
 
 
@@ -572,16 +775,29 @@ function downloadMedia(quality) {
 
 function clearAll() {
 
-  urlInput.value = "";
+  urlInput.value =
+    "";
 
-  clearButton.style.display = "none";
-  downloadButtons.style.display = "none";
-  videoOptions.style.display = "none";
-  qualitySection.style.display = "none";
+  downloadButton.style.display =
+    "none";
 
-  message.textContent = "";
+  clearButton.style.display =
+    "none";
 
-  selectedType = "";
+  downloadButtons.style.display =
+    "none";
+
+  videoOptions.style.display =
+    "none";
+
+  qualitySection.style.display =
+    "none";
+
+  message.textContent =
+    "";
+
+  selectedType =
+    "";
 }
 
 </script>
